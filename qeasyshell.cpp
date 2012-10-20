@@ -1,6 +1,6 @@
 #include "qeasyshell.h"
 
-
-QEasyShell::QEasyShell()
-{
-}
+// TODO: remove this file
+//QEasyShell::QEasyShell()
+//{
+//}

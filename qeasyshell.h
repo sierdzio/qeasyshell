@@ -1,12 +1,15 @@
 #ifndef QEASYSHELL_H
 #define QEASYSHELL_H
 
-#include "QEasyShell_global.h"
+#include "qescommand.h"
 
-class QEASYSHELLSHARED_EXPORT QEasyShell
-{
-public:
-    QEasyShell();
-};
+//#include "QEasyShell_global.h"
+
+// TODO: make this into an include header only
+//class QEASYSHELLSHARED_EXPORT QEasyShell
+//{
+//public:
+//    QEasyShell();
+//};
 
 #endif // QEASYSHELL_H
