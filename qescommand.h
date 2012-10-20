@@ -20,7 +20,7 @@ public:
                         Qes::Shell shell = Qes::Bash,
                         QObject *parent = 0);
 
-    QesResult run(const QByteArray &input = QByteArray());
+    QesResult *run(const QByteArray &input = QByteArray());
     QesResult *runDetached();
 
 private:

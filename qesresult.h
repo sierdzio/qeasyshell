@@ -18,8 +18,8 @@ class QEASYSHELLSHARED_EXPORT QesResult : public QObject
 
 public:
     explicit QesResult(QObject *parent = 0);
-    QesResult pipe(const QesCommand &command);
-    QesResult chain(const QesCommand &command);
+    QesResult *pipe(QesCommand command);
+    QesResult *chain(QesCommand command);
 
     void setRaw(QByteArray rawData);
     QByteArray toRaw();
