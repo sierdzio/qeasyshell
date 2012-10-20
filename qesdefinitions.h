@@ -3,7 +3,9 @@
 
 #include <QtCore/QString>
 
-struct Qes {
+#include "qeasyshellglobal.h"
+
+struct QEASYSHELLSHARED_EXPORT Qes {
     enum Shell {
         Sh   = 0,
         Bash = 1,

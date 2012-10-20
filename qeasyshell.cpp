@@ -1,4 +1,4 @@
-#include "qeasyshell.h"
+//#include "qeasyshell.h"
 
 // TODO: remove this file
 //QEasyShell::QEasyShell()

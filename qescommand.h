@@ -1,7 +1,7 @@
 #ifndef QESCOMMAND_H
 #define QESCOMMAND_H
 
-#include "QEasyShell_global.h"
+#include "qeasyshellglobal.h"
 #include "qesdefinitions.h"
 #include "qesresult.h"
 

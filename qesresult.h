@@ -1,7 +1,7 @@
 #ifndef QESRESULT_H
 #define QESRESULT_H
 
-#include "QEasyShell_global.h"
+#include "qeasyshellglobal.h"
 #include "qesdefinitions.h"
 
 #include <QtCore/QObject>

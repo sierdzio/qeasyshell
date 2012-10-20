@@ -16,19 +16,16 @@ TEMPLATE = lib
 
 DEFINES += QEASYSHELL_LIBRARY
 
-SOURCES += qeasyshell.cpp \
-           qescommand.cpp
-
-HEADERS += qeasyshell.h \
-           QEasyShell_global.h \
-           qescommand.h \
-           qesdefinitions.h
-
-OTHER_FILES += \
-    global.pri
+SOURCES += \
+           qescommand.cpp \
+           qesresult.cpp
 
 HEADERS += \
-    qesresult.h
+           qeasyshellglobal.h \
+           qescommand.h \
+           qesdefinitions.h \
+           qesresult.h
 
-SOURCES += \
-    qesresult.cpp
+OTHER_FILES += \
+               global.pri \
+               QEasyShell

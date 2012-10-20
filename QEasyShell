@@ -1,7 +1,9 @@
-#ifndef QEASYSHELL_H
-#define QEASYSHELL_H
+//#ifndef QEASYSHELL_H
+//#define QEASYSHELL_H
 
+#include "qesdefinitions.h"
 #include "qescommand.h"
+#include "qesresult.h"
 
 //#include "QEasyShell_global.h"
 
@@ -12,4 +14,4 @@
 //    QEasyShell();
 //};
 
-#endif // QEASYSHELL_H
+//#endif // QEASYSHELL_H
