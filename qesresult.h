@@ -3,7 +3,6 @@
 
 #include "QEasyShell_global.h"
 #include "qesdefinitions.h"
-//#include "qescommand.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -21,7 +20,12 @@ public:
     QesResult *pipe(QesCommand command);
     QesResult *chain(QesCommand command);
 
-    void setRaw(QByteArray rawData);
+    void setError(const QByteArray &rawError);
+    QByteArray errorRaw();
+    QString errorString();
+    QStringList errorStringList();
+
+    void setRaw(const QByteArray &rawData);
     QByteArray toRaw();
     QString toString();
     QStringList toStringList();
@@ -30,8 +34,11 @@ public:
     bool isValid();
 
 private:
+    QStringList rawToStringList(const QByteArray &rawData);
+
     bool m_isValid;
     QByteArray m_rawOutput;
+    QByteArray m_rawError;
 };
 
 #endif // QESRESULT_H

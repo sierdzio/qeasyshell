@@ -24,7 +24,27 @@ QesResult *QesResult::chain(QesCommand command)
     return command.run();
 }
 
-void QesResult::setRaw(QByteArray rawData)
+void QesResult::setError(const QByteArray &rawError)
+{
+    m_rawError = rawError;
+}
+
+QByteArray QesResult::errorRaw()
+{
+    return m_rawError;
+}
+
+QString QesResult::errorString()
+{
+    return QString(m_rawError);
+}
+
+QStringList QesResult::errorStringList()
+{
+    return rawToStringList(m_rawError);
+}
+
+void QesResult::setRaw(const QByteArray &rawData)
 {
     m_rawOutput = rawData;
 }
@@ -41,14 +61,7 @@ QString QesResult::toString()
 
 QStringList QesResult::toStringList()
 {
-    QStringList result;
-    QList<QByteArray> temp = m_rawOutput.split('\n');
-
-    foreach (const QByteArray &ba, temp) {
-        result.append(QString(ba));
-    }
-
-    return result;
+    return rawToStringList(m_rawOutput);
 }
 
 void QesResult::setValid(bool validity)
@@ -61,4 +74,16 @@ void QesResult::setValid(bool validity)
 bool QesResult::isValid()
 {
     return m_isValid;
+}
+
+QStringList QesResult::rawToStringList(const QByteArray &rawData)
+{
+    QStringList result;
+    QList<QByteArray> temp = rawData.split('\n');
+
+    foreach (const QByteArray &ba, temp) {
+        result.append(QString(ba));
+    }
+
+    return result;
 }

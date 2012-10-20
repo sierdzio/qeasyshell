@@ -33,7 +33,8 @@ QesResult *QesCommand::run(const QByteArray &input)
         return result;
     }
 
-    result->setRaw(command.readAll());
+    result->setError(command.readAllStandardError());
+    result->setRaw(command.readAllStandardOutput()); //readAll()
     return result;
 }
 
