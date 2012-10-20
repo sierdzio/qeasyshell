@@ -15,6 +15,7 @@ TARGET = QEasyShell
 TEMPLATE = lib
 
 DEFINES += QEASYSHELL_LIBRARY
+DEFINES += DEBUG
 
 SOURCES += \
            qescommand.cpp \

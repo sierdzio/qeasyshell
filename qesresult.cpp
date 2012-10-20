@@ -7,21 +7,21 @@ QesResult::QesResult(QObject *parent) :
     m_rawOutput = QByteArray(); // a null QByteArray
 }
 
-QesResult *QesResult::pipe(QesCommand command)
+QesResult *QesResult::pipe(QesCommand *command)
 {
-    QesResult *result = new QesResult(this);
+    QesResult *result = new QesResult();
 
     if (m_rawOutput.isNull()) {
         result->setValid(false);
         return result;
     }
 
-    return command.run(m_rawOutput);
+    return command->run(m_rawOutput);
 }
 
-QesResult *QesResult::chain(QesCommand command)
+QesResult *QesResult::chain(QesCommand *command)
 {
-    return command.run();
+    return command->run();
 }
 
 void QesResult::setError(const QByteArray &rawError)

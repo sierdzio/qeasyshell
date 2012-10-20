@@ -19,7 +19,7 @@ QesResult *QesCommand::run(const QByteArray &input)
     command.start(commandString);
 
 #ifdef DEBUG
-    qDebug(qPrintable(commandString), NULL);
+    qDebug(qPrintable(commandString + "\n\n" + QString(input)), NULL);
 #endif
 
     if (!command.waitForStarted()) {
