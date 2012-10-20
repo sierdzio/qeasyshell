@@ -14,9 +14,13 @@ QesResult *QesCommand::run(const QByteArray &input)
 {
     QesResult *result = new QesResult(this);
     QProcess command;
-    command.start(Qes::commandForShell(m_shell) + " -c \""
-                  + m_command + m_arguments.join(" ") + "\"",
-                  m_arguments);
+    QString commandString(Qes::commandForShell(m_shell) + " -c \""
+                          + m_command + m_arguments.join(" ") + "\"");
+    command.start(commandString);
+
+#ifdef DEBUG
+    qDebug(qPrintable(commandString), NULL);
+#endif
 
     if (!command.waitForStarted()) {
         result->setValid(false);
