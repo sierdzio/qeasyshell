@@ -1,0 +1,7 @@
+# Tells git to ignore some files.
+*.autosave
+*.pro.user*
+*.kate-swp
+*~
+Makefile
+build/
