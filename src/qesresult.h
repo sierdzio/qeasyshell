@@ -11,6 +11,9 @@
 
 class QesCommand;
 
+/*!
+  Holds all the results of running the QesCommand.
+  */
 class QEASYSHELLSHARED_EXPORT QesResult : public QObject
 {
     Q_OBJECT

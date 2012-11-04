@@ -6,6 +6,11 @@
 #include "qeasyshellglobal.h"
 
 struct QEASYSHELLSHARED_EXPORT Qes {
+    /*!
+      Holds the shell of choice. Defaults to OS default shell.
+
+      NOTE: this is not being used at all right now.
+      */
     enum Shell {
         OS   = 0,
         Sh   = 1,
@@ -14,12 +19,18 @@ struct QEASYSHELLSHARED_EXPORT Qes {
         Zsh  = 4
     };
 
+    /*!
+      Specifies the piping mechanism to use. Defaults to none (for a single command).
+      */
     enum Pipeline {
         None  = 0,
         Chain = 1,
         Pipe  = 2
     };
 
+    /*!
+      Transforms the value of Shell enum into a nice string.
+      */
     static QString shellToString(Shell shell) {
         if (shell == OS)
             return "";
@@ -35,6 +46,9 @@ struct QEASYSHELLSHARED_EXPORT Qes {
             return "sh"; // default.
     }
 
+    /*!
+      Transforms the value of Pipeline enum into a nice string.
+      */
     static QString pipelineToString(Pipeline pl) {
         if (pl == Chain)
             return " && ";
@@ -44,6 +58,5 @@ struct QEASYSHELLSHARED_EXPORT Qes {
         return QString();
     }
 };
-
 
 #endif // QESDEFINITIONS_H

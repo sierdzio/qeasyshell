@@ -12,6 +12,11 @@
 #include "qessubcommand.h"
 #include "qesprocess.h"
 
+/*!
+  This class is used to manage shell command executions, and creating command
+  chains (or pipelines). Easily the most importand class to look at in the whole
+  project.
+  */
 class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 {
     Q_OBJECT

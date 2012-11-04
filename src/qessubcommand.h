@@ -6,6 +6,9 @@
 
 #include "qesdefinitions.h"
 
+/*!
+  Class used internally by QesCommand to manage sub commands in pipes and chains.
+  */
 class QesSubCommand
 {
 public:
@@ -20,6 +23,9 @@ private:
     Qes::Pipeline m_pipeline;
 };
 
+/*!
+  Convenience typedef storing a list of QesSubCommands.
+  */
 typedef QList<QesSubCommand> CommandList;
 
 #endif // QESSUBCOMMAND_H

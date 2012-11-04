@@ -4,6 +4,10 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QProcess>
 
+/*!
+  A thin wrapper for QProcess, adds some functionality missing in base class that
+  is required by QES.
+  */
 class QesProcess : public QProcess
 {
     Q_OBJECT
@@ -30,6 +34,9 @@ private:
     bool m_error;
 };
 
+/*!
+  Convenience typedef for a list of QesProcess objects.
+  */
 typedef QList<QesProcess *> ProcessList;
 
 #endif // QESPROCESS_H
