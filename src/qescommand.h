@@ -1,16 +1,16 @@
 #ifndef QESCOMMAND_H
 #define QESCOMMAND_H
 
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+
 #include "qeasyshellglobal.h"
 #include "qesdefinitions.h"
 #include "qesresult.h"
 #include "qessubcommand.h"
 #include "qesprocess.h"
-
-#include <QtCore/QObject>
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
 
 class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 {

@@ -1,13 +1,13 @@
 #ifndef QESRESULT_H
 #define QESRESULT_H
 
-#include "qeasyshellglobal.h"
-#include "qesdefinitions.h"
-
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+
+#include "qeasyshellglobal.h"
+#include "qesdefinitions.h"
 
 class QesCommand;
 

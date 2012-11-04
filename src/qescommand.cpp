@@ -1,11 +1,6 @@
-#include "qescommand.h"
-
 #include <QtCore/QProcess>
-//#include <QtCore/QTextStream>
-//#include <QtCore/QIODevice>
-//#include <QtCore/QFile>
-//#include <QtCore/QTemporaryFile>
-//#include <QtCore/QDir>
+
+#include "qescommand.h"
 
 QesCommand::QesCommand(const QString &command,
                        Qes::Shell shell,

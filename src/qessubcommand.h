@@ -3,6 +3,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QString>
+
 #include "qesdefinitions.h"
 
 class QesSubCommand
