@@ -7,10 +7,11 @@
 
 struct QEASYSHELLSHARED_EXPORT Qes {
     enum Shell {
-        Sh   = 0,
-        Bash = 1,
-        Tcsh = 2,
-        Zsh  = 3
+        OS   = 0,
+        Sh   = 1,
+        Bash = 2,
+        Tcsh = 3,
+        Zsh  = 4
     };
 
     enum Pipeline {
@@ -20,7 +21,9 @@ struct QEASYSHELLSHARED_EXPORT Qes {
     };
 
     static QString shellToString(Shell shell) {
-        if (shell == Sh)
+        if (shell == OS)
+            return "";
+        else if (shell == Sh)
             return "sh";
         else if (shell == Bash)
             return "bash";
