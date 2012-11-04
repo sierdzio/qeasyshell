@@ -30,3 +30,15 @@ HEADERS += \
 OTHER_FILES += \
                global.pri \
                QEasyShell
+
+HEADERS += \
+    qessubcommand.h
+
+SOURCES += \
+    qessubcommand.cpp
+
+HEADERS += \
+    qesprocess.h
+
+SOURCES += \
+    qesprocess.cpp

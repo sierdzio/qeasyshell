@@ -4,11 +4,14 @@
 #include "qeasyshellglobal.h"
 #include "qesdefinitions.h"
 #include "qesresult.h"
+#include "qessubcommand.h"
+#include "qesprocess.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QProcess>
 
 class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 {
@@ -16,17 +19,25 @@ class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 
 public:
     explicit QesCommand(const QString &command,
-                        const QStringList &arguments = QStringList(),
                         Qes::Shell shell = Qes::Bash,
                         QObject *parent = 0);
+
+    QesCommand *pipe(const QString &command);
+    QesCommand *chain(const QString &command);
 
     QesResult *run(const QByteArray &input = QByteArray());
     QesResult *runDetached();
 
+//    QString command();
+    Qes::Shell shell();
+
 private:
-    QString m_command;
-    QStringList m_arguments;
+    QesProcess *runSubcommand(int index);
+
+//    QString m_command;
     Qes::Shell m_shell;
+
+    CommandList m_commands;
 };
 
 #endif // QESCOMMAND_H

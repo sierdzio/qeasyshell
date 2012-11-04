@@ -13,7 +13,13 @@ struct QEASYSHELLSHARED_EXPORT Qes {
         Zsh  = 3
     };
 
-    static QString commandForShell(Shell shell) {
+    enum Pipeline {
+        None  = 0,
+        Chain = 1,
+        Pipe  = 2
+    };
+
+    static QString shellToString(Shell shell) {
         if (shell == Sh)
             return "sh";
         else if (shell == Bash)
@@ -24,6 +30,15 @@ struct QEASYSHELLSHARED_EXPORT Qes {
             return "zsh";
         else
             return "sh"; // default.
+    }
+
+    static QString pipelineToString(Pipeline pl) {
+        if (pl == Chain)
+            return " && ";
+        else if (pl == Pipe)
+            return " | ";
+
+        return QString();
     }
 };
 
