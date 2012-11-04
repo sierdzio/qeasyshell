@@ -4,7 +4,28 @@ QES tries to make invoking and communicating with shell scripts easy in Qt/C++.
 It is a library that allows for straightforward invocation of shell commands and
 joining them into pipes and chains.
 
+\section building Compiling QES
+QEasyShell requires QtCore library and a working C++ compiler. That's it! Just
+open qeasyshell.pro in QtCreator or run qmake qeasyshell.pro to get started.
+
+No shadow building required, QES automatically puts all the results in build/
+and all libraries in lib/.
+
+Building the documentation requires doxygen. Just run doxygen qeasyshell.docconf
+in project's root directory.
+
+\section usage Examples
 For exmamples on how QES can be used in practice, please see the examples folder.
+To put it simply, if you want to run such pipe:
+\verbatim
+env | grep USER && pwd | wc
+\endverbatim
+
+You need to run this in QES:
+\verbatim
+QesResult *r= QesCommand("env").pipe("grep USER")->chain("pwd")->pipe("wc")->run();
+printf(qPrintable(r->toString()), NULL);
+\endverbatim
 
 \section copyright Copyright and contributions
 
