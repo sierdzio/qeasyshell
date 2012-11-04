@@ -9,7 +9,7 @@ class QesSubCommand
 {
 public:
     QesSubCommand(const QString &command, Qes::Pipeline pipe = Qes::None);
-    QString toString();
+    QString toString() const;
 
     Qes::Pipeline pipeline() const;
     QString command() const;

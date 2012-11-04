@@ -13,13 +13,15 @@ public:
     using QProcess::write;
     
 signals:
-    void readyReadStandardOutput(int processIndex, const QByteArray &data);
+    void readyReadStandardOutput(const QByteArray &data, int processIndex);
+    void readyReadStandardError(const QByteArray &data, int processIndex);
     
 public slots:
-    qint64 write(int processIndex, const QByteArray &data);
+    qint64 write(const QByteArray &data, int processIndex);
 
 protected slots:
-    void prepareReadData();
+    void prepareReadStdOut();
+    void prepareReadStdErr();
     
 private:
     int m_index;

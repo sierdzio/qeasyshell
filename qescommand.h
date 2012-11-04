@@ -11,7 +11,6 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QProcess>
 
 class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 {
@@ -28,13 +27,10 @@ public:
     QesResult *run(const QByteArray &input = QByteArray());
     QesResult *runDetached();
 
-//    QString command();
+    QString command();
     Qes::Shell shell();
 
 private:
-    QesProcess *runSubcommand(int index);
-
-//    QString m_command;
     Qes::Shell m_shell;
 
     CommandList m_commands;

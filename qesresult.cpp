@@ -7,23 +7,6 @@ QesResult::QesResult(QObject *parent) :
     m_rawOutput = QByteArray(); // a null QByteArray
 }
 
-//QesResult *QesResult::pipe(QesCommand *command)
-//{
-//    QesResult *result = new QesResult();
-
-//    if (m_rawOutput.isNull()) {
-//        result->setValid(false);
-//        return result;
-//    }
-
-//    return command->run(m_rawOutput);
-//}
-
-//QesResult *QesResult::chain(QesCommand *command)
-//{
-//    return command->run();
-//}
-
 void QesResult::setError(const QByteArray &rawError)
 {
     m_rawError = rawError;
@@ -74,6 +57,16 @@ void QesResult::setValid(bool validity)
 bool QesResult::isValid()
 {
     return m_isValid;
+}
+
+void QesResult::appendStdOut(const QByteArray &stdOut)
+{
+    m_rawOutput.append(stdOut);
+}
+
+void QesResult::appendStdErr(const QByteArray &stdErr)
+{
+    m_rawError.append(stdErr);
 }
 
 QStringList QesResult::rawToStringList(const QByteArray &rawData)

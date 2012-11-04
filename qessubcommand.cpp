@@ -5,7 +5,7 @@ QesSubCommand::QesSubCommand(const QString &command, Qes::Pipeline pipe) :
 {
 }
 
-QString QesSubCommand::toString()
+QString QesSubCommand::toString() const
 {
     return QString(Qes::pipelineToString(m_pipeline) + m_command);
 }

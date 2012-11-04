@@ -17,8 +17,6 @@ class QEASYSHELLSHARED_EXPORT QesResult : public QObject
 
 public:
     explicit QesResult(QObject *parent = 0);
-//    QesResult *pipe(QesCommand *command);
-//    QesResult *chain(QesCommand *command);
 
     void setError(const QByteArray &rawError);
     QByteArray errorRaw();
@@ -32,6 +30,10 @@ public:
 
     void setValid(bool validity);
     bool isValid();
+
+public slots:
+    void appendStdOut(const QByteArray &stdOut);
+    void appendStdErr(const QByteArray &stdErr);
 
 private:
     QStringList rawToStringList(const QByteArray &rawData);
