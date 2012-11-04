@@ -18,7 +18,6 @@ class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 
 public:
     explicit QesCommand(const QString &command,
-                        Qes::Shell shell = Qes::Bash,
                         QObject *parent = 0);
 
     QesCommand *pipe(const QString &command);
@@ -28,12 +27,10 @@ public:
     QesResult *runDetached();
 
     QString command();
-    Qes::Shell shell();
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);
 
-    Qes::Shell m_shell;
     CommandList m_commands;
 };
 

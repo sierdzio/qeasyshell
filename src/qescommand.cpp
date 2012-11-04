@@ -1,9 +1,8 @@
 #include "qescommand.h"
 
 QesCommand::QesCommand(const QString &command,
-                       Qes::Shell shell,
                        QObject *parent) :
-    QObject(parent), m_shell(shell)
+    QObject(parent)
 {
     m_commands.append(QesSubCommand(command));
 }
@@ -81,11 +80,6 @@ QString QesCommand::command()
     }
 
     return result;
-}
-
-Qes::Shell QesCommand::shell()
-{
-    return m_shell;
 }
 
 void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
