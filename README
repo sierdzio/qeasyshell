@@ -1,3 +1,17 @@
-README for QEasyShell project.
+/*! \mainpage
 
 QES tries to make invoking and communicating with shell scripts easy in Qt/C++.
+It is a library that allows for straightforward invocation of shell commands and
+joining them into pipes and chains.
+
+For exmamples on how QES can be used in practice, please see the examples folder.
+
+\section copyright Copyright and contributions
+
+Copyright (C) 2012 by Tomasz Siekierda.
+
+For licensing, see the LICENSE file or navigate to it in the documentation.
+Please feel free to contribute, report bugs, and suggest changes.
+I (sierdzio) can be contacted at sierdzio@gmail.com.
+git repositories for this project can be found on gitorious.org and github.
+*/
