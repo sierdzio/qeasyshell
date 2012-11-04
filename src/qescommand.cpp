@@ -1,5 +1,3 @@
-#include <QtCore/QProcess>
-
 #include "qescommand.h"
 
 QesCommand::QesCommand(const QString &command,
