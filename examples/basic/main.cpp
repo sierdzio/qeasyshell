@@ -1,9 +1,5 @@
-#include <QString>
-#include <QStringList>
 #include <QDebug>
-
 #include <QEasyShell>
-#include <QProcess>
 
 int main(int argc, char *argv[])
 {
@@ -24,7 +20,6 @@ int main(int argc, char *argv[])
 
     qDebug() << "================";
     qDebug() << "End.";
-    qDebug() << "================";
 
     return 0;
 }
