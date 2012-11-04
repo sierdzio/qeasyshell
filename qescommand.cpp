@@ -39,30 +39,31 @@ QesResult *QesCommand::run(const QByteArray &input)
         QesProcess *command = new QesProcess(i, this);
         processList.append(command);
 
+        QesProcess *current = processList.at(i);
+        QesProcess *previous = processList.at(i - 1);
+
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             if (i != 0) {
-                QesProcess *current = processList.at(i);
-                QesProcess *previous = processList.at(i - 1);
-
-//                connect(previous, SIGNAL(readyReadStandardOutput(const QByteArray &, int)),
-//                        current, SLOT(write(const QByteArray &, int)));
-
                 if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
                         ||(i == (m_commands.length() - 1))) {
-                    connect(current, SIGNAL(readyReadStandardOutput(const QByteArray &, int)),
-                            result, SLOT(appendStdOut(const QByteArray &)));
-                    connect(current, SIGNAL(readyReadStandardError(const QByteArray &, int)),
-                            result, SLOT(appendStdErr(const QByteArray &)));
+                    connectOutputs(current, result);
                 }
 
                 previous->setStandardOutputProcess(current);
                 previous->start(m_commands.at(i - 1).command());
             }
         } else if (pipeline == Qes::Chain) {
-            // TODO: make this part synchronous (all previous commands must finish)
+            // In a chain, we must wait for pre-chain commands to finish
+            previous->start(m_commands.at(i - 1).command());
+            for(int j = 0; j < i; ++j) {
+                processList.at(j)->waitForFinished();
+            }
+
+            connectOutputs(current, result);
         }
     }
 
+    // This will do nothing if last command was chained
     processList.last()->start(m_commands.last().command());
 
     for(int i = 0; i < m_commands.length(); ++i) {
@@ -92,4 +93,12 @@ QString QesCommand::command()
 Qes::Shell QesCommand::shell()
 {
     return m_shell;
+}
+
+void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
+{
+    connect(process, SIGNAL(readyReadStandardOutput(const QByteArray &, int)),
+            result, SLOT(appendStdOut(const QByteArray &)));
+    connect(process, SIGNAL(readyReadStandardError(const QByteArray &, int)),
+            result, SLOT(appendStdErr(const QByteArray &)));
 }

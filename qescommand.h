@@ -31,8 +31,9 @@ public:
     Qes::Shell shell();
 
 private:
-    Qes::Shell m_shell;
+    void connectOutputs(QesProcess *process, QesResult *result);
 
+    Qes::Shell m_shell;
     CommandList m_commands;
 };
 

@@ -10,6 +10,7 @@ class QesProcess : public QProcess
 
 public:
     explicit QesProcess(int index, QObject *parent = 0);
+    bool isError();
     using QProcess::write;
     
 signals:
@@ -18,6 +19,7 @@ signals:
     
 public slots:
     qint64 write(const QByteArray &data, int processIndex);
+    void setError(QProcess::ProcessError error);
 
 protected slots:
     void prepareReadStdOut();
@@ -25,6 +27,7 @@ protected slots:
     
 private:
     int m_index;
+    bool m_error;
 };
 
 typedef QList<QesProcess *> ProcessList;
