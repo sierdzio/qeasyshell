@@ -27,6 +27,15 @@ QesResult *r= QesCommand("env").pipe("grep USER")->chain("pwd")->pipe("wc")->run
 printf(qPrintable(r->toString()), NULL);
 \endverbatim
 
+\section links Where to go now
+You can jump straight into the code, or into using it in your apps. Else, use the
+top bar to read about classes that build up this library.
+
+Some other resources you might be interested in are located in the Related Pages
+section. Here are some quick links:
+\li \link todo Project's official TODO list \endlink
+\li \link license Project's license text \endlink
+
 \section copyright Copyright and contributions
 
 Copyright (C) 2012 by Tomasz Siekierda.
