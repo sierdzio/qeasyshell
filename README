@@ -37,6 +37,10 @@ section. Here are some quick links:
 \li \link license Project's license text \endlink
 
 This documentation is also available online: http://www.sierdzio.com/qeasyshell
+Source code is available on:
+\li gitorious: https://gitorious.org/qeasyshell
+\li github: https://github.com/sierdzio/qeasyshell
+
 
 \section copyright Copyright and contributions
 
@@ -45,5 +49,5 @@ Copyright (C) 2012 by Tomasz Siekierda.
 For licensing, see the \link license LICENSE \endlink file or navigate to it in the documentation.
 Please feel free to contribute, report bugs, and suggest changes.
 I (sierdzio) can be contacted at sierdzio@gmail.com.
-git repositories for this project can be found on gitorious.org and github.
+git repositories for this project can be found on gitorious.org and github (see above).
 */
