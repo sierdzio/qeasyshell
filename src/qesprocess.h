@@ -11,6 +11,8 @@
 #include <QtCore/QProcess>
 
 /*!
+  \brief Expands QProcess with some methods important in shell communication.
+
   A thin wrapper for QProcess, adds some functionality missing in base class that
   is required by QES.
   */
@@ -24,7 +26,16 @@ public:
     using QProcess::write;
     
 signals:
+    /*!
+      Similar to base signal of QProcess of that same name, but this one passes
+      the \a data and \a processIndex, too, for convenience.
+      */
     void readyReadStandardOutput(const QByteArray &data, int processIndex);
+
+    /*!
+      Similar to base signal of QProcess of that same name, but this one passes
+      the \a data and \a processIndex, too, for convenience.
+      */
     void readyReadStandardError(const QByteArray &data, int processIndex);
     
 public slots:
@@ -41,6 +52,8 @@ private:
 };
 
 /*!
+  \relates QesProcess
+
   Convenience typedef for a list of QesProcess objects.
   */
 typedef QList<QesProcess *> ProcessList;

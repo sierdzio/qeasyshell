@@ -13,6 +13,8 @@
 #include "qesdefinitions.h"
 
 /*!
+  \brief A small private class used internally for storing managing command chains.
+
   Class used internally by QesCommand to manage sub commands in pipes and chains.
   */
 class QesSubCommand
@@ -30,6 +32,8 @@ private:
 };
 
 /*!
+  \relates QesSubCommand
+
   Convenience typedef storing a list of QesSubCommands.
   */
 typedef QList<QesSubCommand> CommandList;

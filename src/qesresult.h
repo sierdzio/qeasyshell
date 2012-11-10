@@ -18,6 +18,9 @@
 class QesCommand;
 
 /*!
+  \brief Returned as result of QesCommand execution, provides access to stdout
+  and stderr.
+
   Holds all the results of running the QesCommand.
   */
 class QEASYSHELLSHARED_EXPORT QesResult : public QObject

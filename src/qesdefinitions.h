@@ -8,9 +8,11 @@
 #define QESDEFINITIONS_H
 
 #include <QtCore/QString>
-
 #include "qeasyshellglobal.h"
 
+/*!
+  \brief Global Qes convenience structure, holds useful enums and static methods.
+  */
 struct QEASYSHELLSHARED_EXPORT Qes {
     /*!
       Holds the shell of choice. Defaults to OS default shell.

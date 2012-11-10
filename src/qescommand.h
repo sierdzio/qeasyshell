@@ -19,6 +19,8 @@
 #include "qesprocess.h"
 
 /*!
+  \brief Base class used to manage command chaining and execution.
+
   This class is used to manage shell command executions, and creating command
   chains (or pipelines). Easily the most importand class to look at in the whole
   project.
