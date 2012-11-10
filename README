@@ -36,11 +36,13 @@ section. Here are some quick links:
 \li \link todo Project's official TODO list \endlink
 \li \link license Project's license text \endlink
 
+This documentation is also available online: http://www.sierdzio.com/qeasyshell
+
 \section copyright Copyright and contributions
 
 Copyright (C) 2012 by Tomasz Siekierda.
 
-For licensing, see the LICENSE file or navigate to it in the documentation.
+For licensing, see the \link license LICENSE \endlink file or navigate to it in the documentation.
 Please feel free to contribute, report bugs, and suggest changes.
 I (sierdzio) can be contacted at sierdzio@gmail.com.
 git repositories for this project can be found on gitorious.org and github.
