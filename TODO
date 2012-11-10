@@ -1,0 +1,11 @@
+/*! \page todo TODO
+\brief List of things that should be done in QES
+
+A general list of things that may be implemented in the future, or are being
+worked upon right now, in QES. Feel free to suggest, and/ or help implementing
+new and existing entries!
+
+\li asynchronous API and functionality
+\li support for input and output redirection (1>, 2>>, etc.)
+\li proper support for other shells (is it really needed?)
+*/
