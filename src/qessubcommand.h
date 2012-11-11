@@ -24,6 +24,7 @@ public:
     QString toString() const;
 
     Qes::Pipeline pipeline() const;
+    void setPipeline(Qes::Pipeline pipeline);
     QString command() const;
 
 private:

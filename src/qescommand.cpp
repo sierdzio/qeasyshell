@@ -39,7 +39,12 @@ QesCommand *QesCommand::pipe(const QString &command)
   */
 QesCommand *QesCommand::pipe(QesCommand *command)
 {
-    m_commands.append(command->commandList());
+    CommandList temp = command->commandList();
+    QesSubCommand tempsub = temp.takeAt(0);
+    // This is required because the first subcommand is usually set to Qes::None
+    tempsub.setPipeline(Qes::Pipe);
+    m_commands.append(tempsub);
+    m_commands.append(temp);
     return this;
 }
 
@@ -66,7 +71,12 @@ QesCommand *QesCommand::chain(const QString &command)
   */
 QesCommand *QesCommand::chain(QesCommand *command)
 {
-    m_commands.append(command->commandList());
+    CommandList temp = command->commandList();
+    QesSubCommand tempsub = temp.takeAt(0);
+    // This is required because the first subcommand is usually set to Qes::None
+    tempsub.setPipeline(Qes::Chain);
+    m_commands.append(tempsub);
+    m_commands.append(temp);
     return this;
 }
 

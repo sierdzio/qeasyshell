@@ -31,6 +31,14 @@ Qes::Pipeline QesSubCommand::pipeline() const
 }
 
 /*!
+  Setter for subcommand's pipeline.
+  */
+void QesSubCommand::setPipeline(Qes::Pipeline pipeline)
+{
+    m_pipeline = pipeline;
+}
+
+/*!
   Returns the command string.
   */
 QString QesSubCommand::command() const
