@@ -34,12 +34,15 @@ public:
                         QObject *parent = 0);
 
     QesCommand *pipe(const QString &command);
+    QesCommand *pipe(QesCommand *command);
     QesCommand *chain(const QString &command);
+    QesCommand *chain(QesCommand *command);
 
     QesResult *run(const QByteArray &input = QByteArray());
     QesResult *runDetached();
 
     QString command();
+    CommandList commandList();
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);

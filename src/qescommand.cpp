@@ -35,6 +35,15 @@ QesCommand *QesCommand::pipe(const QString &command)
 }
 
 /*!
+  An overload taking another QesCommand object.
+  */
+QesCommand *QesCommand::pipe(QesCommand *command)
+{
+    m_commands.append(command->commandList());
+    return this;
+}
+
+/*!
   Adds a specified \a command as a chain after the previous one. Returns a pointer
   to the updated QesCommand object, to allow easy chaining.
 
@@ -49,6 +58,15 @@ QesCommand *QesCommand::pipe(const QString &command)
 QesCommand *QesCommand::chain(const QString &command)
 {
     m_commands.append(QesSubCommand(command, Qes::Chain));
+    return this;
+}
+
+/*!
+  An overload taking another QesCommand object.
+  */
+QesCommand *QesCommand::chain(QesCommand *command)
+{
+    m_commands.append(command->commandList());
     return this;
 }
 
@@ -147,6 +165,15 @@ QString QesCommand::command()
     }
 
     return result;
+}
+
+/*!
+  Returns the internal list of commands. Not very useful for end users, but
+  important in chaining subcommands.
+  */
+CommandList QesCommand::commandList()
+{
+    return m_commands;
 }
 
 /*!
