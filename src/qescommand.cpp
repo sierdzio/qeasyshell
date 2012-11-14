@@ -14,9 +14,10 @@ QesCommand::QesCommand(const QString &command,
     QObject(parent)
 {
     m_commands.append(QesSubCommand(command));
-    m_result = 0;
+    m_result = NULL;
+    m_currentCommandIndex = -1;
 
-    connect(this, SIGNAL(finishedStep(QesResult*)), this, SLOT(processNextStep(QesResult*)));
+//    connect(this, SIGNAL(finishedStep(QesResult*)), this, SLOT(processNextStep(QesResult*)));
 }
 
 /*!
@@ -138,6 +139,7 @@ QesResult *QesCommand::run(const QByteArray &input)
     }
 
     m_result = result;
+    emit finished(result);
     return result;
 }
 
@@ -154,8 +156,10 @@ void QesCommand::runDetached(const QByteArray &input)
 
     QesResult *result = new QesResult(this);
     ProcessList processList;
+    m_result = result;
 
     for(int i = 0; i < m_commands.length(); ++i) {
+        m_currentCommandIndex = i;
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
         QesProcess *command = new QesProcess(i, this);
         processList.append(command);
@@ -176,20 +180,21 @@ void QesCommand::runDetached(const QByteArray &input)
         } else if (pipeline == Qes::Chain) {
             // In a chain, we must wait for pre-chain commands to finish
             previous->start(m_commands.at(i - 1).command());
-            for(int j = 0; j < i; ++j) {
-                processList.at(j)->waitForFinished();
-            }
+            //for(int j = 0; j < i; ++j) {
+            //    processList.at(j)->waitForFinished();
+            //}
 
             connectOutputs(current, result);
+            connect(current, SIGNAL(finished(int)), this, SLOT(processNextStep()));
         }
     }
 
     // This will do nothing if last command was chained
-    processList.last()->start(m_commands.last().command());
+    //processList.last()->start(m_commands.last().command());
 
-    for(int i = 0; i < m_commands.length(); ++i) {
-        processList.at(i)->waitForFinished();
-    }
+    //for(int i = 0; i < m_commands.length(); ++i) {
+    //    processList.at(i)->waitForFinished();
+    //}
 
     return;
 }
@@ -199,7 +204,7 @@ QesResult *QesCommand::result()
     return m_result;
 }
 
-void QesCommand::processNextStep(QesResult *result)
+void QesCommand::processNextStep()
 {
 }
 

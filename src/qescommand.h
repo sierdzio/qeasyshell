@@ -50,11 +50,12 @@ signals:
     void finished(QesResult *result);
 
 protected slots:
-    void processNextStep(QesResult *result);
+    void processNextStep();
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);
 
+    int m_currentCommandIndex;
     CommandList m_commands;
     QesResult *m_result;
 };
