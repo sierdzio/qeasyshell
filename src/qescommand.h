@@ -46,11 +46,13 @@ public:
     CommandList commandList();
 
 signals:
+    // TODO: evaluate and start using!
     void finishedStep(QesResult *result);
-    void finished(QesResult *result);
+    // TODO: add finished(QesResult *);
+    void finished();
 
 protected slots:
-    void processNextStep();
+    void processNextStep(int pid, QProcess::ExitStatus pes);
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);

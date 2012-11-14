@@ -185,7 +185,8 @@ void QesCommand::runDetached(const QByteArray &input)
             //}
 
             connectOutputs(current, result);
-            connect(current, SIGNAL(finished(int)), this, SLOT(processNextStep()));
+            connect(current, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processNextStep(int,QProcess::ExitStatus)));
+            break;
         }
     }
 
@@ -204,8 +205,48 @@ QesResult *QesCommand::result()
     return m_result;
 }
 
-void QesCommand::processNextStep()
+void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
 {
+    Q_UNUSED(pid);
+
+    if (pes == QProcess::CrashExit) {
+        // TODO: ERROR!
+        m_result->setError(QString("Process PID: " + QString::number(pid) + "failed!").toLocal8Bit());
+        return;
+    }
+
+    ProcessList processList;
+
+    for(int i = m_currentCommandIndex; i < m_commands.length(); ++i) {
+        m_currentCommandIndex = i;
+        Qes::Pipeline pipeline = m_commands.at(i).pipeline();
+        QesProcess *command = new QesProcess(i, this);
+        processList.append(command);
+
+        QesProcess *current = processList.at(i);
+        QesProcess *previous = processList.at(i - 1);
+
+        if (pipeline == Qes::None || pipeline == Qes::Pipe) {
+            if (i != 0) {
+                // TODO: this code is important in chain, too! What if chain is the last command, eh?
+                if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
+                        ||(i == (m_commands.length() - 1))) {
+                    connectOutputs(current, m_result);
+
+                    if (i == (m_commands.length() - 1))
+                        connect(current, SIGNAL(finished(int)), this, SIGNAL(finished()));
+                }
+
+                previous->setStandardOutputProcess(current);
+                previous->start(m_commands.at(i - 1).command());
+            }
+        } else if (pipeline == Qes::Chain) {
+            previous->start(m_commands.at(i - 1).command());
+            connectOutputs(current, m_result);
+            connect(current, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processNextStep(int,QProcess::ExitStatus)));
+            break;
+        }
+    }
 }
 
 /*!
