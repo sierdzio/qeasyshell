@@ -44,6 +44,13 @@ public:
     QString command();
     CommandList commandList();
 
+signals:
+    void finishedStep(QesResult *result);
+    void finished(QesResult *result);
+
+protected slots:
+    void processNextStep(QesResult *result);
+
 private:
     void connectOutputs(QesProcess *process, QesResult *result);
 
