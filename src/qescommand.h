@@ -39,7 +39,8 @@ public:
     QesCommand *chain(QesCommand *command);
 
     QesResult *run(const QByteArray &input = QByteArray());
-    QesResult *runDetached();
+    void runDetached(const QByteArray &input = QByteArray());
+    QesResult *result();
 
     QString command();
     CommandList commandList();
@@ -55,6 +56,7 @@ private:
     void connectOutputs(QesProcess *process, QesResult *result);
 
     CommandList m_commands;
+    QesResult *m_result;
 };
 
 #endif // QESCOMMAND_H
