@@ -17,8 +17,6 @@ QesCommand::QesCommand(const QString &command,
     m_commands.append(QesSubCommand(command));
     m_result = NULL;
     m_currentCommandIndex = -1;
-
-//    connect(this, SIGNAL(finishedStep(QesResult*)), this, SLOT(processNextStep(QesResult*)));
 }
 
 /*!
@@ -105,7 +103,7 @@ QesResult *QesCommand::run(const QByteArray &input)
 
     for(int i = 0; i < m_commands.length(); ++i) {
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
-        m_processList.append(new QesProcess(i, this));
+        processList.append(new QesProcess(i, this));
 
         QesProcess *current = processList.at(i);
         QesProcess *previous = (i != 0)? processList.at(i - 1) : 0;
@@ -122,7 +120,8 @@ QesResult *QesCommand::run(const QByteArray &input)
             }
         } else if (pipeline == Qes::Chain) {
             // In a chain, we must wait for pre-chain commands to finish
-            previous->start(m_commands.at(i - 1).command());
+            if (i > 0)
+                previous->start(m_commands.at(i - 1).command());
             for(int j = 0; j < i; ++j) {
                 processList.at(j)->waitForFinished();
             }
@@ -190,6 +189,7 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
     }
 
     for(int i = m_currentCommandIndex; i < m_commands.length(); ++i) {
+        bool takeABreak = false;
         m_currentCommandIndex = i;
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
         m_processList.append(new QesProcess(i, this));
@@ -213,13 +213,16 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
             connectOutputs(current, m_result);
             connect(previous, SIGNAL(finished(int, QProcess::ExitStatus)),
                     this, SLOT(processNextStep(int, QProcess::ExitStatus)));
-            break;
+            takeABreak = true;
         }
 
         if (i == (m_commands.length() - 1)) {
             current->start(m_commands.at(i).command());
             connect(current, SIGNAL(finished(int)), this, SLOT(aboutToFinish()));
         }
+
+        if (takeABreak)
+            break;
     }
 }
 
