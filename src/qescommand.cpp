@@ -13,6 +13,7 @@ QesCommand::QesCommand(const QString &command,
                        QObject *parent) :
     QObject(parent)
 {
+    m_finished = false;
     m_commands.append(QesSubCommand(command));
     m_result = NULL;
     m_currentCommandIndex = -1;
@@ -155,7 +156,10 @@ void QesCommand::runDetached(const QByteArray &input)
     Q_UNUSED(input);
     m_processList.clear();
     m_currentCommandIndex = 0;
-    processNextStep(0, QProcess::NormalExit);
+    this->metaObject()->invokeMethod(this, "processNextStep",
+                                     Qt::QueuedConnection,
+                                     Q_ARG(int, 0));
+//    processNextStep(0, QProcess::NormalExit);
     return;
 }
 
@@ -164,9 +168,22 @@ QesResult *QesCommand::result()
     return m_result;
 }
 
+bool QesCommand::isResultReady()
+{
+    return m_finished;
+}
+
+bool QesCommand::isFinished()
+{
+    return m_finished;
+}
+
 void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
 {
     Q_UNUSED(pid);
+
+    if (m_result == NULL)
+        m_result = new QesResult(this);
 
     if (pes == QProcess::CrashExit) {
         // TODO: ERROR!
@@ -198,12 +215,14 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
             previous->start(m_commands.at(i - 1).command());
             connectOutputs(current, m_result);
             connect(current, SIGNAL(finished(int,QProcess::ExitStatus)),
-                    this, SLOT(processNextStep(int,QProcess::ExitStatus)));
+                    this, SLOT(processNextStep(int,QProcess::ExitStatus)),
+                    Qt::QueuedConnection);
             break;
         }
 
         if (i == (m_commands.length() - 1))
-            connect(current, SIGNAL(finished(int)), this, SLOT(aboutToFinish()));
+            connect(current, SIGNAL(finished(int)), this, SLOT(aboutToFinish()),
+                    Qt::QueuedConnection);
     }
 }
 
@@ -249,18 +268,19 @@ CommandList QesCommand::commandList()
 void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
 {
     connect(process, SIGNAL(readyReadStandardOutput(const QByteArray &, int)),
-            result, SLOT(appendStdOut(const QByteArray &)));
+            result, SLOT(appendStdOut(const QByteArray &)), Qt::QueuedConnection);
     connect(process, SIGNAL(readyReadStandardError(const QByteArray &, int)),
-            result, SLOT(appendStdErr(const QByteArray &)));
+            result, SLOT(appendStdErr(const QByteArray &)), Qt::QueuedConnection);
 }
 
 void QesCommand::aboutToFinish()
 {
-    foreach (QesProcess *process, m_processList) {
-        delete process;
-    }
+//    foreach (QesProcess *process, m_processList) {
+//        process->deleteLater();
+//    }
+//    m_processList.clear();
 
-    m_processList.clear();
+    m_finished = true;
     emit finished();
     emit finished(m_result);
 }

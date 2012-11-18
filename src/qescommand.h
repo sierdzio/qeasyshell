@@ -40,7 +40,10 @@ public:
 
     QesResult *run(const QByteArray &input = QByteArray());
     void runDetached(const QByteArray &input = QByteArray());
+
     QesResult *result();
+    bool isResultReady();
+    bool isFinished();
 
     QString command();
     CommandList commandList();
@@ -52,12 +55,13 @@ signals:
     void finished();
 
 protected slots:
-    void processNextStep(int pid, QProcess::ExitStatus pes);
+    void processNextStep(int pid, QProcess::ExitStatus pes = QProcess::NormalExit);
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);
     void aboutToFinish();
 
+    bool m_finished;
     int m_currentCommandIndex;
     CommandList m_commands;
     ProcessList m_processList;

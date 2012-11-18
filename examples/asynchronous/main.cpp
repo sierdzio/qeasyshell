@@ -4,29 +4,15 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * http://sam.zoy.org/wtfpl/COPYING for more details. */
 
-#include <QDebug>
-#include <QEasyShell>
+#include <QCoreApplication>
+#include "detachedexecution.h"
 
 int main(int argc, char *argv[])
 {
-    Q_UNUSED(argc);
-    Q_UNUSED(argv);
+    QCoreApplication app(argc, argv);
 
-    qDebug() << "================";
-    qDebug() << "QEasyShell example - asynchronous API usage.";
-    QesCommand env("env");
-    env.pipe("grep USER")->chain("pwd")->pipe("wc")->runDetached();
-    qDebug() << "Quick result before run finishes:" << env.result()->toString();
-    qDebug() << "Command is:" << env.command();
+    DetachedExecution object;
+    object.exec();
 
-    qDebug() << "=======OUT======";
-    qDebug() << env.result()->toString();
-
-    qDebug() << "=======ERR======";
-    qDebug() << env.result()->errorString();
-
-    qDebug() << "================";
-    qDebug() << "End.";
-
-    return 0;
+    return app.exec();
 }
