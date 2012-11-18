@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     Q_UNUSED(argv);
     
     qDebug() << "================";
-    qDebug() << "QEasyShell test.";
+    qDebug() << "QEasyShell example - basic.";
     QesCommand env("env");
     QesResult *result = env.pipe("grep USER")->chain("pwd")->pipe("wc")->run();
     qDebug() << "Command is:" << env.command();

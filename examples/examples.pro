@@ -1,6 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += basic
-
-SUBDIRS += \
+SUBDIRS += asynchronous \
+    basic \
     combiningCommands

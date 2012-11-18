@@ -155,7 +155,7 @@ void QesCommand::runDetached(const QByteArray &input)
     Q_UNUSED(input);
     m_processList.clear();
     m_currentCommandIndex = 0;
-    processNextStep(0, 0);
+    processNextStep(0, QProcess::NormalExit);
     return;
 }
 

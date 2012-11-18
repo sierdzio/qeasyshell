@@ -13,18 +13,17 @@ int main(int argc, char *argv[])
     Q_UNUSED(argv);
 
     qDebug() << "================";
-    qDebug() << "QEasyShell example - combining commands.";
+    qDebug() << "QEasyShell example - asynchronous API usage.";
     QesCommand env("env");
-    QesCommand *pwdWc = new QesCommand("pwd");
-    pwdWc->pipe("wc");
-    QesResult *result = env.pipe("grep USER")->chain(pwdWc)->run();
+    env.pipe("grep USER")->chain("pwd")->pipe("wc")->runDetached();
+    qDebug() << "Quick result before run finishes:" << env.result()->toString();
     qDebug() << "Command is:" << env.command();
 
     qDebug() << "=======OUT======";
-    qDebug() << result->toString();
+    qDebug() << env.result()->toString();
 
     qDebug() << "=======ERR======";
-    qDebug() << result->errorString();
+    qDebug() << env.result()->errorString();
 
     qDebug() << "================";
     qDebug() << "End.";
