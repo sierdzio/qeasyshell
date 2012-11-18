@@ -105,11 +105,10 @@ QesResult *QesCommand::run(const QByteArray &input)
 
     for(int i = 0; i < m_commands.length(); ++i) {
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
-        QesProcess *command = new QesProcess(i, this);
-        processList.append(command);
+        m_processList.append(new QesProcess(i, this));
 
         QesProcess *current = processList.at(i);
-        QesProcess *previous = processList.at(i - 1);
+        QesProcess *previous = (i != 0)? processList.at(i - 1) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             if (i != 0) {
@@ -157,7 +156,6 @@ void QesCommand::runDetached(const QByteArray &input)
     m_processList.clear();
     m_currentCommandIndex = 0;
     this->metaObject()->invokeMethod(this, "processNextStep",
-                                     Qt::QueuedConnection,
                                      Q_ARG(int, 0));
 //    processNextStep(0, QProcess::NormalExit);
     return;
@@ -194,11 +192,10 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
     for(int i = m_currentCommandIndex; i < m_commands.length(); ++i) {
         m_currentCommandIndex = i;
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
-        QesProcess *command = new QesProcess(i, this);
-        m_processList.append(command);
+        m_processList.append(new QesProcess(i, this));
 
         QesProcess *current = m_processList.at(i);
-        QesProcess *previous = m_processList.at(i - 1);
+        QesProcess *previous = (i != 0)? m_processList.at(i - 1) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             if (i != 0) {
@@ -214,15 +211,15 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
         } else if (pipeline == Qes::Chain) {
             previous->start(m_commands.at(i - 1).command());
             connectOutputs(current, m_result);
-            connect(current, SIGNAL(finished(int,QProcess::ExitStatus)),
-                    this, SLOT(processNextStep(int,QProcess::ExitStatus)),
-                    Qt::QueuedConnection);
+            connect(previous, SIGNAL(finished(int, QProcess::ExitStatus)),
+                    this, SLOT(processNextStep(int, QProcess::ExitStatus)));
             break;
         }
 
-        if (i == (m_commands.length() - 1))
-            connect(current, SIGNAL(finished(int)), this, SLOT(aboutToFinish()),
-                    Qt::QueuedConnection);
+        if (i == (m_commands.length() - 1)) {
+            current->start(m_commands.at(i).command());
+            connect(current, SIGNAL(finished(int)), this, SLOT(aboutToFinish()));
+        }
     }
 }
 
@@ -268,9 +265,9 @@ CommandList QesCommand::commandList()
 void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
 {
     connect(process, SIGNAL(readyReadStandardOutput(const QByteArray &, int)),
-            result, SLOT(appendStdOut(const QByteArray &)), Qt::QueuedConnection);
+            result, SLOT(appendStdOut(const QByteArray &)));
     connect(process, SIGNAL(readyReadStandardError(const QByteArray &, int)),
-            result, SLOT(appendStdErr(const QByteArray &)), Qt::QueuedConnection);
+            result, SLOT(appendStdErr(const QByteArray &)));
 }
 
 void QesCommand::aboutToFinish()

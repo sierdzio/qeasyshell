@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
 
     DetachedExecution object;
-    object.exec();
+    object.metaObject()->invokeMethod(&object, "exec", Qt::QueuedConnection);
 
     return app.exec();
 }

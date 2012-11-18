@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QEasyShell>
+#include <QCoreApplication>
 
 DetachedExecution::DetachedExecution(QObject *parent) :
     QObject(parent)
@@ -17,12 +18,12 @@ void DetachedExecution::exec()
     qDebug() << "Quick result before run finishes:" << env.result()->toString();
     qDebug() << "Command is:" << env.command();
 
-//    forever {
-//        if (!env.isFinished())
-//            app.processEvents();
-//        else
-//            break;
-//    }
+    forever {
+        if (!env.isFinished())
+            QCoreApplication::instance()->processEvents();
+        else
+            break;
+    }
 
     qDebug() << "=======OUT======";
     qDebug() << env.result()->toString();
