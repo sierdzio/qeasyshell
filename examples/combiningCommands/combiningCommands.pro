@@ -17,4 +17,5 @@ DESTDIR  = $${EXEC_DIRECTORY}
 INCLUDEPATH += $${ROOT_DIRECTORY}/src
 LIBS        += -L$${LIB_DIRECTORY} -lQEasyShell
 
-SOURCES += main.cpp
+SOURCES += \
+    combiningCommands.cpp

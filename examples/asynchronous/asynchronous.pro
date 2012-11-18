@@ -17,8 +17,9 @@ DESTDIR  = $${EXEC_DIRECTORY}
 INCLUDEPATH += $${ROOT_DIRECTORY}/src
 LIBS        += -L$${LIB_DIRECTORY} -lQEasyShell
 
-SOURCES += main.cpp \
-    detachedexecution.cpp
+SOURCES += \
+    detachedexecution.cpp \
+    asynchronous.cpp
 
 HEADERS += \
     detachedexecution.h
