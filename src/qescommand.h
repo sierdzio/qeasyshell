@@ -48,7 +48,7 @@ public:
 signals:
     // TODO: evaluate and start using!
     void finishedStep(QesResult *result);
-    // TODO: add finished(QesResult *);
+    void finished(QesResult *);
     void finished();
 
 protected slots:
@@ -56,9 +56,11 @@ protected slots:
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);
+    void aboutToFinish();
 
     int m_currentCommandIndex;
     CommandList m_commands;
+    ProcessList m_processList;
     QesResult *m_result;
 };
 

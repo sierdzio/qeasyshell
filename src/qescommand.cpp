@@ -153,50 +153,9 @@ QesResult *QesCommand::run(const QByteArray &input)
 void QesCommand::runDetached(const QByteArray &input)
 {
     Q_UNUSED(input);
-
-    QesResult *result = new QesResult(this);
-    ProcessList processList;
-    m_result = result;
-
-    for(int i = 0; i < m_commands.length(); ++i) {
-        m_currentCommandIndex = i;
-        Qes::Pipeline pipeline = m_commands.at(i).pipeline();
-        QesProcess *command = new QesProcess(i, this);
-        processList.append(command);
-
-        QesProcess *current = processList.at(i);
-        QesProcess *previous = processList.at(i - 1);
-
-        if (pipeline == Qes::None || pipeline == Qes::Pipe) {
-            if (i != 0) {
-                if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
-                        ||(i == (m_commands.length() - 1))) {
-                    connectOutputs(current, result);
-                }
-
-                previous->setStandardOutputProcess(current);
-                previous->start(m_commands.at(i - 1).command());
-            }
-        } else if (pipeline == Qes::Chain) {
-            // In a chain, we must wait for pre-chain commands to finish
-            previous->start(m_commands.at(i - 1).command());
-            //for(int j = 0; j < i; ++j) {
-            //    processList.at(j)->waitForFinished();
-            //}
-
-            connectOutputs(current, result);
-            connect(current, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processNextStep(int,QProcess::ExitStatus)));
-            break;
-        }
-    }
-
-    // This will do nothing if last command was chained
-    //processList.last()->start(m_commands.last().command());
-
-    //for(int i = 0; i < m_commands.length(); ++i) {
-    //    processList.at(i)->waitForFinished();
-    //}
-
+    m_processList.clear();
+    m_currentCommandIndex = 0;
+    processNextStep(0, 0);
     return;
 }
 
@@ -215,26 +174,21 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
         return;
     }
 
-    ProcessList processList;
-
     for(int i = m_currentCommandIndex; i < m_commands.length(); ++i) {
         m_currentCommandIndex = i;
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
         QesProcess *command = new QesProcess(i, this);
-        processList.append(command);
+        m_processList.append(command);
 
-        QesProcess *current = processList.at(i);
-        QesProcess *previous = processList.at(i - 1);
+        QesProcess *current = m_processList.at(i);
+        QesProcess *previous = m_processList.at(i - 1);
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             if (i != 0) {
                 // TODO: this code is important in chain, too! What if chain is the last command, eh?
                 if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
                         ||(i == (m_commands.length() - 1))) {
-                    connectOutputs(current, m_result);
-
-                    if (i == (m_commands.length() - 1))
-                        connect(current, SIGNAL(finished(int)), this, SIGNAL(finished()));
+                    connectOutputs(current, m_result);                    
                 }
 
                 previous->setStandardOutputProcess(current);
@@ -243,9 +197,13 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
         } else if (pipeline == Qes::Chain) {
             previous->start(m_commands.at(i - 1).command());
             connectOutputs(current, m_result);
-            connect(current, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processNextStep(int,QProcess::ExitStatus)));
+            connect(current, SIGNAL(finished(int,QProcess::ExitStatus)),
+                    this, SLOT(processNextStep(int,QProcess::ExitStatus)));
             break;
         }
+
+        if (i == (m_commands.length() - 1))
+            connect(current, SIGNAL(finished(int)), this, SLOT(aboutToFinish()));
     }
 }
 
@@ -294,4 +252,15 @@ void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
             result, SLOT(appendStdOut(const QByteArray &)));
     connect(process, SIGNAL(readyReadStandardError(const QByteArray &, int)),
             result, SLOT(appendStdErr(const QByteArray &)));
+}
+
+void QesCommand::aboutToFinish()
+{
+    foreach (QesProcess *process, m_processList) {
+        delete process;
+    }
+
+    m_processList.clear();
+    emit finished();
+    emit finished(m_result);
 }
