@@ -6,7 +6,6 @@ worked upon right now, in QES. Feel free to suggest, and/ or help implementing
 new and existing entries!
 
 \li add option to compile statically
-\li asynchronous API and functionality
 \li support for input and output redirection (1>, 2>>, etc.)
 \li proper support for other shells than bash (is it really needed?)
 \li add support for passing shell script strings to execute

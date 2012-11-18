@@ -145,9 +145,9 @@ QesResult *QesCommand::run(const QByteArray &input)
 /*!
   Same as run, but asynchronous - the method returns immediately and executes in
   the background. In order to get the result, you need to wait for signals it
-  will emit once finished.
+  will emit once finished (finished()), and then get the result using result().
 
-  \sa run, pipe, chain
+  \sa run, pipe, chain, finished, isFinished, result
   */
 void QesCommand::runDetached(const QByteArray &input)
 {
@@ -156,25 +156,48 @@ void QesCommand::runDetached(const QByteArray &input)
     m_currentCommandIndex = 0;
     this->metaObject()->invokeMethod(this, "processNextStep",
                                      Q_ARG(int, 0));
-//    processNextStep(0, QProcess::NormalExit);
     return;
 }
 
+/*!
+  Returns a result of the command. Is null if no command was run.
+
+  To check if there were any errors, you can use the QesResult object's error() method.
+
+  \sa isResultReady, isFinished
+ */
 QesResult *QesCommand::result()
 {
     return m_result;
 }
 
+/*!
+  Returns true if command finished executing and the result is ready.
+
+  \sa result, isFinished
+ */
 bool QesCommand::isResultReady()
 {
     return m_finished;
 }
 
+/*!
+  Returns true if command finished executing and the result is ready.
+
+  This is a simple synonym to isResultReady.
+
+  \sa result, isResultReady
+ */
 bool QesCommand::isFinished()
 {
     return m_finished;
 }
 
+/*!
+  Processes next blocking step of command chain execution (that is, QesCommand
+  needs to wait for all pipes to finish before it can execute any chain commands
+  ('&&')).
+ */
 void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
 {
     Q_UNUSED(pid);
@@ -274,6 +297,11 @@ void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
             result, SLOT(appendStdErr(const QByteArray &)));
 }
 
+/*!
+  Performs the actions needed to finalise detahed command execution.
+
+  Emitts finished() signals.
+ */
 void QesCommand::aboutToFinish()
 {
     foreach (QesProcess *process, m_processList) {

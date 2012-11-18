@@ -24,6 +24,22 @@
   This class is used to manage shell command executions, and creating command
   chains (or pipelines). Easily the most importand class to look at in the whole
   project.
+
+  You can run commands synchronously using run(). This method will not return
+  until all chained commands finish and the result is ready. That makes it easy to
+  use, but may cause the UI to become unresponsive if commands take a lot of time
+  to execute.
+
+  In that case, you can use runDetached() which will return immediately and execute
+  all commands in the background. Once the result is ready, it will emit finished()
+  and the output will be ready under result().
+
+  See QES examples to see it in action, here is just a tiny example of synchronous
+  run:
+  \verbatim
+  QesResult *r= QesCommand("env").pipe("grep USER")->chain("pwd")->pipe("wc")->run();
+  printf(qPrintable(r->toString()), NULL);
+  \endverbatim
   */
 class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 {
@@ -49,9 +65,23 @@ public:
     CommandList commandList();
 
 signals:
-    // TODO: evaluate and start using!
+    /*!
+      Unused.
+     */
     void finishedStep(QesResult *result);
+
+    /*!
+      Emitted when the command has stopped running.
+
+      \sa result
+     */
     void finished(QesResult *);
+
+    /*!
+      Emitted when the command has stopped running.
+
+      \sa result
+     */
     void finished();
 
 protected slots:
