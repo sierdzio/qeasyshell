@@ -33,4 +33,5 @@ void DetachedExecution::exec()
 
     qDebug() << "================";
     qDebug() << "End.";
+    QCoreApplication::quit();
 }

@@ -56,10 +56,10 @@ signals:
 
 protected slots:
     void processNextStep(int pid, QProcess::ExitStatus pes = QProcess::NormalExit);
+    void aboutToFinish();
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);
-    void aboutToFinish();
 
     bool m_finished;
     int m_currentCommandIndex;

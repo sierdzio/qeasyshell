@@ -214,6 +214,7 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
             connect(previous, SIGNAL(finished(int, QProcess::ExitStatus)),
                     this, SLOT(processNextStep(int, QProcess::ExitStatus)));
             takeABreak = true;
+            ++m_currentCommandIndex;
         }
 
         if (i == (m_commands.length() - 1)) {
@@ -275,10 +276,10 @@ void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
 
 void QesCommand::aboutToFinish()
 {
-//    foreach (QesProcess *process, m_processList) {
-//        process->deleteLater();
-//    }
-//    m_processList.clear();
+    foreach (QesProcess *process, m_processList) {
+        process->deleteLater();
+    }
+    m_processList.clear();
 
     m_finished = true;
     emit finished();
