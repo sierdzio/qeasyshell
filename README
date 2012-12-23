@@ -20,6 +20,12 @@ and all libraries in lib/.
 Building the documentation requires doxygen. Just run doxygen qeasyshell.docconf
 in project's root directory.
 
+\section warning Warning - platform compatibility
+QES is developed and tested under Linux, but should work well on all UNIX-like
+OSes, including Mac OS X. However, Windows is not really supported at this
+stage. You can try using it, but I can give no guarantees it will work. A proper
+Win support is planned, though, don't you worry.
+
 \section usage Examples
 For exmamples on how QES can be used in practice, please see the examples folder.
 To put it simply, if you want to run such pipe:
