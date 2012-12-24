@@ -15,7 +15,7 @@ void DetachedExecution::exec()
     qDebug() << "QEasyShell example - asynchronous API usage.";
     QesCommand env("env");
     env.pipe("grep USER")->chain("pwd")->pipe("wc")->runDetached();
-    qDebug() << "Quick result before run finishes:" << env.result()->toString();
+    qDebug() << "Quick result before run finishes:" << env.result()->stdOutString();
     qDebug() << "Command is:" << env.command();
 
     forever {
@@ -26,10 +26,10 @@ void DetachedExecution::exec()
     }
 
     qDebug() << "=======OUT======";
-    qDebug() << env.result()->toString();
+    qDebug() << env.result()->stdOutString();
 
     qDebug() << "=======ERR======";
-    qDebug() << env.result()->errorString();
+    qDebug() << env.result()->stdErrString();
 
     qDebug() << "================";
     qDebug() << "End.";

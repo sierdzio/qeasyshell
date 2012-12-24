@@ -21,10 +21,10 @@ int main(int argc, char *argv[])
     qDebug() << "Command is:" << env.command();
 
     qDebug() << "=======OUT======";
-    qDebug() << result->toString();
+    qDebug() << result->stdOutString();
 
     qDebug() << "=======ERR======";
-    qDebug() << result->errorString();
+    qDebug() << result->stdErrString();
 
     qDebug() << "================";
     qDebug() << "End.";

@@ -71,7 +71,8 @@ signals:
     void finishedStep(QesResult *result);
 
     /*!
-      Emitted when the command has stopped running.
+      Emitted when the command has stopped running. Passes a pointer to result
+      object.
 
       \sa result
      */

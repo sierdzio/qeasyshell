@@ -21,7 +21,8 @@ class QesCommand;
   \brief Returned as result of QesCommand execution, provides access to stdout
   and stderr.
 
-  Holds all the results of running the QesCommand.
+  Holds all the results of running the QesCommand, including errors if any
+  were reported.
   */
 class QEASYSHELLSHARED_EXPORT QesResult : public QObject
 {
@@ -30,29 +31,29 @@ class QEASYSHELLSHARED_EXPORT QesResult : public QObject
 public:
     explicit QesResult(QObject *parent = 0);
 
-    void setError(const QByteArray &rawError);
-    QByteArray errorRaw();
-    QString errorString();
-    QStringList errorStringList();
+    void setStdErr(const QByteArray &rawError);
+    QByteArray stdErrRaw();
+    QString stdErrString();
+    QStringList stdErrStringList();
 
-    void setRaw(const QByteArray &rawData);
-    QByteArray toRaw();
-    QString toString();
-    QStringList toStringList();
+    void setStdOut(const QByteArray &rawData);
+    QByteArray stdOutRaw();
+    QString stdOutString();
+    QStringList stdOutStringList();
 
     void setValid(bool validity);
     bool isValid();
 
 public slots:
-    void appendStdOut(const QByteArray &stdOut);
+    void appendStdOut(const QByteArray &stdOutRaw);
     void appendStdErr(const QByteArray &stdErr);
 
 private:
     QStringList rawToStringList(const QByteArray &rawData);
 
     bool m_isValid;
-    QByteArray m_rawOutput;
-    QByteArray m_rawError;
+    QByteArray m_rawStdOut;
+    QByteArray m_rawStdErr;
 };
 
 #endif // QESRESULT_H

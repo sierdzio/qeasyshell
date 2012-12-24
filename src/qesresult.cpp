@@ -15,7 +15,7 @@
 QesResult::QesResult(QObject *parent) :
     QObject(parent)
 {
-    m_rawOutput = QByteArray(); // a null QByteArray
+    m_rawStdOut = QByteArray(); // a null QByteArray
 }
 
 /*!
@@ -23,33 +23,33 @@ QesResult::QesResult(QObject *parent) :
 
   \sa appendStdErr
   */
-void QesResult::setError(const QByteArray &rawError)
+void QesResult::setStdErr(const QByteArray &rawError)
 {
-    m_rawError = rawError;
+    m_rawStdErr = rawError;
 }
 
 /*!
   Returns the raw error output.
   */
-QByteArray QesResult::errorRaw()
+QByteArray QesResult::stdErrRaw()
 {
-    return m_rawError;
+    return m_rawStdErr;
 }
 
 /*!
   Returns error data as a string.
   */
-QString QesResult::errorString()
+QString QesResult::stdErrString()
 {
-    return QString(m_rawError);
+    return QString(m_rawStdErr);
 }
 
 /*!
   Returns the error data as a list of error lines.
   */
-QStringList QesResult::errorStringList()
+QStringList QesResult::stdErrStringList()
 {
-    return rawToStringList(m_rawError);
+    return rawToStringList(m_rawStdErr);
 }
 
 /*!
@@ -58,33 +58,33 @@ QStringList QesResult::errorStringList()
 
   \sa appendStdOut
   */
-void QesResult::setRaw(const QByteArray &rawData)
+void QesResult::setStdOut(const QByteArray &rawData)
 {
-    m_rawOutput = rawData;
+    m_rawStdOut = rawData;
 }
 
 /*!
   Returns raw output data.
   */
-QByteArray QesResult::toRaw()
+QByteArray QesResult::stdOutRaw()
 {
-    return m_rawOutput;
+    return m_rawStdOut;
 }
 
 /*!
   Returns output data as a string.
   */
-QString QesResult::toString()
+QString QesResult::stdOutString()
 {
-    return QString(m_rawOutput);
+    return QString(m_rawStdOut);
 }
 
 /*!
   Returns the output data as a list of consecutive lines.
   */
-QStringList QesResult::toStringList()
+QStringList QesResult::stdOutStringList()
 {
-    return rawToStringList(m_rawOutput);
+    return rawToStringList(m_rawStdOut);
 }
 
 /*!
@@ -94,7 +94,7 @@ void QesResult::setValid(bool validity)
 {
     m_isValid = validity;
     if (validity == false)
-        m_rawOutput = QByteArray(); // a null QByteArray
+        m_rawStdOut = QByteArray(); // a null QByteArray
 }
 
 /*!
@@ -112,7 +112,7 @@ bool QesResult::isValid()
   */
 void QesResult::appendStdOut(const QByteArray &stdOut)
 {
-    m_rawOutput.append(stdOut);
+    m_rawStdOut.append(stdOut);
 }
 
 /*!
@@ -122,7 +122,7 @@ void QesResult::appendStdOut(const QByteArray &stdOut)
   */
 void QesResult::appendStdErr(const QByteArray &stdErr)
 {
-    m_rawError.append(stdErr);
+    m_rawStdErr.append(stdErr);
 }
 
 /*!
