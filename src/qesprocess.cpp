@@ -21,6 +21,8 @@ QesProcess::QesProcess(int index, QObject *parent) :
 
 /*!
   Returns true if the process encountered an error.
+
+  \sa errorString, setError
   */
 bool QesProcess::isError()
 {
@@ -29,6 +31,8 @@ bool QesProcess::isError()
 
 /*!
   Returns a string with nice description of error enum code.
+
+  \sa isError, setError
  */
 QString QesProcess::errorString()
 {
@@ -75,6 +79,8 @@ qint64 QesProcess::write(const QByteArray &data, int processIndex)
 
 /*!
   Sets internal error state to true. \a error parameter is ignored.
+
+  \sa isError, errorString
   */
 void QesProcess::setError(QProcess::ProcessError error)
 {
