@@ -28,6 +28,27 @@ bool QesProcess::isError()
 }
 
 /*!
+  Returns a string with nice description of error enum code.
+ */
+QString QesProcess::errorString()
+{
+    QString result;
+
+    if (isError())
+        return result;
+
+    switch (error()) {
+    case FailedToStart:
+        result = "Missing binary or insufficient permissions";
+        break;
+    default:
+        break;
+    }
+
+    return result;
+}
+
+/*!
   Writes \a data to the process (stdin). Requires \a processIndex for internal
   reasons.
   */
