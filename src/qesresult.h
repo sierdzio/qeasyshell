@@ -32,28 +32,33 @@ public:
     explicit QesResult(QObject *parent = 0);
 
     void setStdErr(const QByteArray &rawError);
-    QByteArray stdErrRaw();
-    QString stdErrString();
-    QStringList stdErrStringList();
+    QByteArray stdErrRaw() const;
+    QString stdErrString() const;
+    QStringList stdErrStringList() const;
 
     void setStdOut(const QByteArray &rawData);
-    QByteArray stdOutRaw();
-    QString stdOutString();
-    QStringList stdOutStringList();
+    QByteArray stdOutRaw() const;
+    QString stdOutString() const;
+    QStringList stdOutStringList() const;
+
+    void setProgressError(const QString &message);
+    QString progressError() const;
 
     void setValid(bool validity);
-    bool isValid();
+    bool isValid() const;
 
 public slots:
     void appendStdOut(const QByteArray &stdOutRaw);
     void appendStdErr(const QByteArray &stdErr);
+    void appendProgressError(const QString &message);
 
 private:
-    QStringList rawToStringList(const QByteArray &rawData);
+    QStringList rawToStringList(const QByteArray &rawData) const;
 
     bool m_isValid;
     QByteArray m_rawStdOut;
     QByteArray m_rawStdErr;
+    QString m_progressError;
 };
 
 #endif // QESRESULT_H

@@ -57,12 +57,12 @@ public:
     QesResult *run(const QByteArray &input = QByteArray());
     void runDetached(const QByteArray &input = QByteArray());
 
-    QesResult *result();
-    bool isResultReady();
-    bool isFinished();
+    QesResult *result() const;
+    bool isResultReady() const;
+    bool isFinished() const;
 
-    QString command();
-    CommandList commandList();
+    QString command() const;
+    CommandList commandList() const;
 
 signals:
     /*!

@@ -24,7 +24,7 @@ QesProcess::QesProcess(int index, QObject *parent) :
 
   \sa errorString, setError
   */
-bool QesProcess::isError()
+bool QesProcess::isError() const
 {
     return m_error;
 }
@@ -34,7 +34,7 @@ bool QesProcess::isError()
 
   \sa isError, setError
  */
-QString QesProcess::errorString()
+QString QesProcess::errorString() const
 {
     QString result;
 

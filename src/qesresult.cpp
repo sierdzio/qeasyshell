@@ -31,7 +31,7 @@ void QesResult::setStdErr(const QByteArray &rawError)
 /*!
   Returns the raw error output.
   */
-QByteArray QesResult::stdErrRaw()
+QByteArray QesResult::stdErrRaw() const
 {
     return m_rawStdErr;
 }
@@ -39,7 +39,7 @@ QByteArray QesResult::stdErrRaw()
 /*!
   Returns error data as a string.
   */
-QString QesResult::stdErrString()
+QString QesResult::stdErrString() const
 {
     return QString(m_rawStdErr);
 }
@@ -47,7 +47,7 @@ QString QesResult::stdErrString()
 /*!
   Returns the error data as a list of error lines.
   */
-QStringList QesResult::stdErrStringList()
+QStringList QesResult::stdErrStringList() const
 {
     return rawToStringList(m_rawStdErr);
 }
@@ -66,7 +66,7 @@ void QesResult::setStdOut(const QByteArray &rawData)
 /*!
   Returns raw output data.
   */
-QByteArray QesResult::stdOutRaw()
+QByteArray QesResult::stdOutRaw() const
 {
     return m_rawStdOut;
 }
@@ -74,7 +74,7 @@ QByteArray QesResult::stdOutRaw()
 /*!
   Returns output data as a string.
   */
-QString QesResult::stdOutString()
+QString QesResult::stdOutString() const
 {
     return QString(m_rawStdOut);
 }
@@ -82,9 +82,31 @@ QString QesResult::stdOutString()
 /*!
   Returns the output data as a list of consecutive lines.
   */
-QStringList QesResult::stdOutStringList()
+QStringList QesResult::stdOutStringList() const
 {
     return rawToStringList(m_rawStdOut);
+}
+
+/*!
+  Sets the progress error to \a message. This clears all previous values.
+
+  \sa progressError, appendProgressError
+ */
+void QesResult::setProgressError(const QString &message)
+{
+    m_progressError = message;
+}
+
+/*!
+  Returns the progress error. Progress error is not stdErr. It is used to report
+  problems in running the command itself (like "Command not found", "Permissions
+  denied", etc.)
+
+  \sa stdErrRaw, setProgressError, appendProgressError
+ */
+QString QesResult::progressError() const
+{
+    return m_progressError;
 }
 
 /*!
@@ -100,7 +122,7 @@ void QesResult::setValid(bool validity)
 /*!
   Returns true if the result object is valid.
   */
-bool QesResult::isValid()
+bool QesResult::isValid() const
 {
     return m_isValid;
 }
@@ -126,10 +148,19 @@ void QesResult::appendStdErr(const QByteArray &stdErr)
 }
 
 /*!
+  Appends \a message to progress error variable. It does not add any separation
+  to the previous message (no space, no new line).
+ */
+void QesResult::appendProgressError(const QString &message)
+{
+    m_progressError.append(message);
+}
+
+/*!
   Converts a stream of raw data into a string list (where each entry represents
   one line of the output).
   */
-QStringList QesResult::rawToStringList(const QByteArray &rawData)
+QStringList QesResult::rawToStringList(const QByteArray &rawData) const
 {
     QStringList result;
     QList<QByteArray> temp = rawData.split('\n');

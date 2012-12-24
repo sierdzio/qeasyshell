@@ -22,8 +22,8 @@ class QesProcess : public QProcess
 
 public:
     explicit QesProcess(int index, QObject *parent = 0);
-    bool isError();
-    QString errorString();
+    bool isError() const;
+    QString errorString() const;
     using QProcess::write;
     
 signals:

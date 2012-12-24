@@ -166,7 +166,7 @@ void QesCommand::runDetached(const QByteArray &input)
 
   \sa isResultReady, isFinished
  */
-QesResult *QesCommand::result()
+QesResult *QesCommand::result() const
 {
     return m_result;
 }
@@ -176,7 +176,7 @@ QesResult *QesCommand::result()
 
   \sa result, isFinished
  */
-bool QesCommand::isResultReady()
+bool QesCommand::isResultReady() const
 {
     return m_finished;
 }
@@ -188,7 +188,7 @@ bool QesCommand::isResultReady()
 
   \sa result, isResultReady
  */
-bool QesCommand::isFinished()
+bool QesCommand::isFinished() const
 {
     return m_finished;
 }
@@ -266,7 +266,7 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
   Command is: "env | grep USER && pwd | wc"
   \endverbatim
   */
-QString QesCommand::command()
+QString QesCommand::command() const
 {
     QString result;
 
@@ -281,7 +281,7 @@ QString QesCommand::command()
   Returns the internal list of commands. Not very useful for end users, but
   important in chaining subcommands.
   */
-CommandList QesCommand::commandList()
+CommandList QesCommand::commandList() const
 {
     return m_commands;
 }
