@@ -39,7 +39,22 @@ QString QesProcess::errorString()
 
     switch (error()) {
     case FailedToStart:
-        result = "Missing binary or insufficient permissions";
+        result = "Missing binary or insufficient permissions.";
+        break;
+    case Crashed:
+        result = "Process crashed.";
+        break;
+    case Timedout:
+        result = "Last waitFor*() call timed out.";
+        break;
+    case WriteError:
+        result = "Could not write to process.";
+        break;
+    case ReadError:
+        result = "Could not read from process.";
+        break;
+    case UnknownError:
+        result = "QesProcess encountered an unknown error.";
         break;
     default:
         break;
