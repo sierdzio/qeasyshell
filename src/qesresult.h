@@ -18,11 +18,16 @@
 class QesCommand;
 
 /*!
-  \brief Returned as result of QesCommand execution, provides access to stdout
-  and stderr.
+  \brief Returned as result of QesCommand execution, provides access to data
+         regarding the outcome of the QesCommand operation..
 
   Holds all the results of running the QesCommand, including errors if any
   were reported.
+
+  3 main channels are available: stdOut (which holds standard console output of
+  all processes that were run by QesCommand), stdErr (standard error data reported
+  by processes), and progressError (provides metadata errors - failure to run
+  any of the QesCommands in chain, process crash, etc).
   */
 class QEASYSHELLSHARED_EXPORT QesResult : public QObject
 {
