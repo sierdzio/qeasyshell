@@ -54,6 +54,9 @@ public:
     QesCommand *chain(const QString &command);
     QesCommand *chain(QesCommand *command);
 
+    QesCommand *operator |(QesCommand *command);
+    QesCommand *operator |(const QString &command);
+
     QesResult *run(const QByteArray &input = QByteArray());
     void runDetached(const QByteArray &input = QByteArray());
 

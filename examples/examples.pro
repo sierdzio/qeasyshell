@@ -4,4 +4,5 @@ SUBDIRS += asynchronous \
     basic \
     combiningCommands \
     progressErrorTest \
-    inputData
+    inputData \
+    naturalSyntax

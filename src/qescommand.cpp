@@ -29,7 +29,7 @@ QesCommand::QesCommand(const QString &command,
   QesResult *result = env.pipe("grep USER")->chain("pwd")->pipe("wc")->run();
   \endcode
 
-  \sa chain, run
+  \sa chain, run, operator|()
   */
 QesCommand *QesCommand::pipe(const QString &command)
 {
@@ -81,6 +81,36 @@ QesCommand *QesCommand::chain(QesCommand *command)
     m_commands.append(tempsub);
     m_commands.append(temp);
     return this;
+}
+
+/*!
+  Handy overload for pipe method.
+
+  \verbatim
+    QesCommand env("env");
+    QesResult *result = (env | ("grep USER")->run();
+  \endverbatim
+
+  \sa pipe
+  */
+QesCommand *QesCommand::operator |(QesCommand *command)
+{
+    return pipe(command);
+}
+
+/*!
+  Handy overload for pipe method.
+
+  \verbatim
+    QesCommand env("env");
+    QesResult *result = (env | ("grep USER")->run();
+  \endverbatim
+
+  \sa pipe
+  */
+QesCommand *QesCommand::operator |(const QString &command)
+{
+    return pipe(command);
 }
 
 /*!
