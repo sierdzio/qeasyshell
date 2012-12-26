@@ -6,8 +6,6 @@ worked upon right now, in QES. Feel free to suggest, and/ or help implementing
 new and existing entries!
 
 \li add option to compile statically
-\li add initial seed data support (input to input stream of the first method in
-    chain given as a QByteArray)
 \li stop on errors (is applicable)
 \li add support for '>' and '>>'
 \li test natural syntax possibility (operator>>, operator>, operator| and operator&&)
