@@ -96,8 +96,6 @@ QesCommand *QesCommand::chain(QesCommand *command)
   */
 QesResult *QesCommand::run(const QByteArray &input)
 {
-    //Q_UNUSED(input);
-
     QesResult *result = new QesResult(this);
     ProcessList processList;
 
@@ -109,12 +107,12 @@ QesResult *QesCommand::run(const QByteArray &input)
         QesProcess *previous = (i != 0)? processList.at(i - 1) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
-            if (i != 0) {
-                if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
-                        ||(i == (m_commands.length() - 1))) {
-                    connectOutputs(current, result);
-                }
+            if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
+                    ||(i == (m_commands.length() - 1))) {
+                connectOutputs(current, result);
+            }
 
+            if (i != 0) {
                 previous->setStandardOutputProcess(current);
                 previous->start(m_commands.at(i - 1).command());
 
@@ -244,13 +242,13 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
         QesProcess *previous = (i != 0)? m_processList.at(i - 1) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
-            if (i != 0) {
-                // TODO: this code is important in chain, too! What if chain is the last command, eh?
-                if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
-                        ||(i == (m_commands.length() - 1))) {
-                    connectOutputs(current, m_result);
-                }
+            // TODO: this code is important in chain, too! What if chain is the last command, eh?
+            if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
+                    ||(i == (m_commands.length() - 1))) {
+                connectOutputs(current, m_result);
+            }
 
+            if (i != 0) {
                 previous->setStandardOutputProcess(current);
                 previous->start(m_commands.at(i - 1).command());
 

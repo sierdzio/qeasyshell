@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 SUBDIRS += asynchronous \
     basic \
     combiningCommands \
-    progressErrorTest
+    progressErrorTest \
+    inputData
