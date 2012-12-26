@@ -31,6 +31,9 @@ void DetachedExecution::exec()
     qDebug() << "=======ERR======";
     qDebug() << env.result()->stdErrString();
 
+    qDebug() << "==PROGRESS ERR==";
+    qDebug() << env.result()->progressError();
+
     qDebug() << "================";
     qDebug() << "End.";
     QCoreApplication::quit();

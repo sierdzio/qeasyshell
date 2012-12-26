@@ -124,10 +124,7 @@ QesResult *QesCommand::run(const QByteArray &input)
                 previous->start(m_commands.at(i - 1).command());
 
             for(int j = 0; j < i; ++j) {
-                if (!processList.at(j)->waitForFinished()) {
-                    result->appendProgressError(QString("Process PID: " + QString::number(j) + "failed! Error: "
-                                                        + processList.at(j)->errorString()));
-                }
+                processList.at(j)->waitForFinished();
             }
 
             connectOutputs(current, result);
@@ -138,8 +135,10 @@ QesResult *QesCommand::run(const QByteArray &input)
     processList.last()->start(m_commands.last().command());
 
     for(int i = 0; i < m_commands.length(); ++i) {
-        if (!processList.at(i)->waitForFinished()) {
-            result->appendProgressError(QString("Process PID: " + QString::number(i) + "failed! Error: "
+        processList.at(i)->waitForFinished();
+
+        if (processList.at(i)->isError()) {
+            result->appendProgressError(QString("Process: " + m_commands.at(i).command() + " failed! Error: "
                                                 + processList.at(i)->errorString()));
         }
     }
@@ -214,7 +213,7 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
 
     if (pes == QProcess::CrashExit) {
         //m_result->setStdErr(QString("Process PID: " + QString::number(pid) + "failed!").toLocal8Bit());
-        m_result->appendProgressError(QString("Process PID: " + QString::number(pid) + "failed! Error: "
+        m_result->appendProgressError(QString("Process: " + m_commands.at(pid).command() + " failed! Error: "
                                               + m_processList.at(pid)->errorString()));
         return;
     }

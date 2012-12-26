@@ -26,6 +26,9 @@ int main(int argc, char *argv[])
     qDebug() << "=======ERR======";
     qDebug() << result->stdErrString();
 
+    qDebug() << "==PROGRESS ERR==";
+    qDebug() << result->progressError();
+
     qDebug() << "================";
     qDebug() << "End.";
 
