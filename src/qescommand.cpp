@@ -96,7 +96,7 @@ QesCommand *QesCommand::chain(QesCommand *command)
   */
 QesResult *QesCommand::run(const QByteArray &input)
 {
-    Q_UNUSED(input);
+    //Q_UNUSED(input);
 
     QesResult *result = new QesResult(this);
     ProcessList processList;
@@ -117,11 +117,21 @@ QesResult *QesCommand::run(const QByteArray &input)
 
                 previous->setStandardOutputProcess(current);
                 previous->start(m_commands.at(i - 1).command());
+
+                if (i == 1) {
+                    previous->write(input);
+                    previous->closeWriteChannel();
+                }
             }
         } else if (pipeline == Qes::Chain) {
             // In a chain, we must wait for pre-chain commands to finish
             if (i > 0)
                 previous->start(m_commands.at(i - 1).command());
+
+            if (i == 1) {
+                previous->write(input);
+                previous->closeWriteChannel();
+            }
 
             for(int j = 0; j < i; ++j) {
                 processList.at(j)->waitForFinished();
@@ -133,6 +143,11 @@ QesResult *QesCommand::run(const QByteArray &input)
 
     // This will do nothing if last command was chained
     processList.last()->start(m_commands.last().command());
+
+    if (m_commands.length() == 1) {
+        processList.last()->write(input);
+        processList.last()->closeWriteChannel();
+    }
 
     for(int i = 0; i < m_commands.length(); ++i) {
         processList.at(i)->waitForFinished();
@@ -161,7 +176,9 @@ void QesCommand::runDetached(const QByteArray &input)
     m_processList.clear();
     m_currentCommandIndex = 0;
     this->metaObject()->invokeMethod(this, "processNextStep",
-                                     Q_ARG(int, 0));
+                                     Q_ARG(int, 0),
+                                     Q_ARG(QProcess::ExitStatus, QProcess::NormalExit),
+                                     Q_ARG(QByteArray, input));
     return;
 }
 
@@ -204,7 +221,7 @@ bool QesCommand::isFinished() const
   needs to wait for all pipes to finish before it can execute any chain commands
   ('&&')).
  */
-void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
+void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteArray &input)
 {
     Q_UNUSED(pid);
 
@@ -236,9 +253,20 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
 
                 previous->setStandardOutputProcess(current);
                 previous->start(m_commands.at(i - 1).command());
+
+                if (i == 1) {
+                    previous->write(input);
+                    previous->closeWriteChannel();
+                }
             }
         } else if (pipeline == Qes::Chain) {
             previous->start(m_commands.at(i - 1).command());
+
+            if (i == 1) {
+                previous->write(input);
+                previous->closeWriteChannel();
+            }
+
             connectOutputs(current, m_result);
             connect(previous, SIGNAL(finished(int, QProcess::ExitStatus)),
                     this, SLOT(processNextStep(int, QProcess::ExitStatus)));

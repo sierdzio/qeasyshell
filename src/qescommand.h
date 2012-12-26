@@ -86,7 +86,8 @@ signals:
     void finished();
 
 protected slots:
-    void processNextStep(int pid, QProcess::ExitStatus pes = QProcess::NormalExit);
+    void processNextStep(int pid, QProcess::ExitStatus pes = QProcess::NormalExit,
+                         const QByteArray &input = QByteArray());
     void aboutToFinish();
 
 private:
