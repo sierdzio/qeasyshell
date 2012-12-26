@@ -122,8 +122,13 @@ QesResult *QesCommand::run(const QByteArray &input)
             // In a chain, we must wait for pre-chain commands to finish
             if (i > 0)
                 previous->start(m_commands.at(i - 1).command());
+
             for(int j = 0; j < i; ++j) {
                 processList.at(j)->waitForFinished();
+                if (processList.at(j)->exitStatus() == QProcess::CrashExit) {
+                    result->appendProgressError(QString("Process PID: " + QString::number(pid) + "failed! Error: "
+                                                          + m_processList.at(pid)->errorString()));
+                }
             }
 
             connectOutputs(current, result);
@@ -206,7 +211,6 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
         m_result = new QesResult(this);
 
     if (pes == QProcess::CrashExit) {
-        // TODO: ERROR!
         //m_result->setStdErr(QString("Process PID: " + QString::number(pid) + "failed!").toLocal8Bit());
         m_result->appendProgressError(QString("Process PID: " + QString::number(pid) + "failed! Error: "
                                               + m_processList.at(pid)->errorString()));
