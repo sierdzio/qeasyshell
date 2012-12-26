@@ -4,6 +4,9 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * http://sam.zoy.org/wtfpl/COPYING for more details. */
 
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+
 #include "qescommand.h"
 
 /*!
@@ -52,6 +55,36 @@ QesCommand *QesCommand::pipe(QesCommand *command)
 }
 
 /*!
+  Handy overload for pipe method.
+
+  \verbatim
+    QesCommand env("env");
+    QesResult *result = (env | ("grep USER")->run();
+  \endverbatim
+
+  \sa pipe
+  */
+QesCommand *QesCommand::operator |(QesCommand *command)
+{
+    return pipe(command);
+}
+
+/*!
+  Handy overload for pipe method.
+
+  \verbatim
+    QesCommand env("env");
+    QesResult *result = (env | ("grep USER")->run();
+  \endverbatim
+
+  \sa pipe
+  */
+QesCommand *QesCommand::operator |(const QString &command)
+{
+    return pipe(command);
+}
+
+/*!
   Adds a specified \a command as a chain after the previous one. Returns a pointer
   to the updated QesCommand object, to allow easy chaining.
 
@@ -84,33 +117,23 @@ QesCommand *QesCommand::chain(QesCommand *command)
 }
 
 /*!
-  Handy overload for pipe method.
-
-  \verbatim
-    QesCommand env("env");
-    QesResult *result = (env | ("grep USER")->run();
-  \endverbatim
-
-  \sa pipe
+  NOT implemented yet.
   */
-QesCommand *QesCommand::operator |(QesCommand *command)
+QesCommand *QesCommand::redirect(const QString &destination, bool append, QProcess::ProcessChannel channel)
 {
-    return pipe(command);
+    Q_UNUSED(append);
+    Q_UNUSED(channel);
+
+    m_commands.append(QesSubCommand(destination, Qes::Redirect));
+    return this;
 }
 
 /*!
-  Handy overload for pipe method.
-
-  \verbatim
-    QesCommand env("env");
-    QesResult *result = (env | ("grep USER")->run();
-  \endverbatim
-
-  \sa pipe
+  NOT implemented yet.
   */
-QesCommand *QesCommand::operator |(const QString &command)
+QesCommand *QesCommand::operator >>(const QString &destination)
 {
-    return pipe(command);
+    return redirect(destination, true, QProcess::StandardOutput);
 }
 
 /*!

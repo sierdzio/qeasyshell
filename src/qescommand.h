@@ -51,11 +51,16 @@ public:
 
     QesCommand *pipe(const QString &command);
     QesCommand *pipe(QesCommand *command);
+    QesCommand *operator |(QesCommand *command);
+    QesCommand *operator |(const QString &command);
+
     QesCommand *chain(const QString &command);
     QesCommand *chain(QesCommand *command);
 
-    QesCommand *operator |(QesCommand *command);
-    QesCommand *operator |(const QString &command);
+    QesCommand *redirect(const QString &destination, bool append = false,
+                         QProcess::ProcessChannel channel = QProcess::StandardOutput);
+    QesCommand *operator >>(const QString &destination);
+
 
     QesResult *run(const QByteArray &input = QByteArray());
     void runDetached(const QByteArray &input = QByteArray());
