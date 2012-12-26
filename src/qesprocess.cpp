@@ -38,12 +38,12 @@ QString QesProcess::errorString() const
 {
     QString result;
 
-    if (isError())
+    if (!isError())
         return result;
 
     switch (error()) {
     case FailedToStart:
-        result = "Missing binary or insufficient permissions.";
+        result = "Could not find binary or insufficient permissions.";
         break;
     case Crashed:
         result = "Process crashed.";

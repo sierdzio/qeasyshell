@@ -151,9 +151,9 @@ void QesResult::appendStdErr(const QByteArray &stdErr)
   Appends \a message to progress error variable. It does not add any separation
   to the previous message (no space, no new line).
  */
-void QesResult::appendProgressError(const QString &message)
+void QesResult::appendProgressError(const QString &message, bool addNewLine)
 {
-    m_progressError.append(message);
+    m_progressError.append(message + QString((addNewLine)? "\n" : ""));
 }
 
 /*!

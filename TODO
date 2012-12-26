@@ -6,6 +6,7 @@ worked upon right now, in QES. Feel free to suggest, and/ or help implementing
 new and existing entries!
 
 \li add option to compile statically
+\li stop on errors (is applicable)
 \li add support for '>' and '>>'
 \li support for input and output redirection (1>, 2>>, etc.)
 \li proper support for other shells than bash (is it really needed?)

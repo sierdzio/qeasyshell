@@ -55,7 +55,7 @@ public:
 public slots:
     void appendStdOut(const QByteArray &stdOutRaw);
     void appendStdErr(const QByteArray &stdErr);
-    void appendProgressError(const QString &message);
+    void appendProgressError(const QString &message, bool addNewLine = true);
 
 private:
     QStringList rawToStringList(const QByteArray &rawData) const;

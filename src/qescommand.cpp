@@ -124,10 +124,9 @@ QesResult *QesCommand::run(const QByteArray &input)
                 previous->start(m_commands.at(i - 1).command());
 
             for(int j = 0; j < i; ++j) {
-                processList.at(j)->waitForFinished();
-                if (processList.at(j)->exitStatus() == QProcess::CrashExit) {
-                    result->appendProgressError(QString("Process PID: " + QString::number(pid) + "failed! Error: "
-                                                          + m_processList.at(pid)->errorString()));
+                if (!processList.at(j)->waitForFinished()) {
+                    result->appendProgressError(QString("Process PID: " + QString::number(j) + "failed! Error: "
+                                                        + processList.at(j)->errorString()));
                 }
             }
 
@@ -139,7 +138,10 @@ QesResult *QesCommand::run(const QByteArray &input)
     processList.last()->start(m_commands.last().command());
 
     for(int i = 0; i < m_commands.length(); ++i) {
-        processList.at(i)->waitForFinished();
+        if (!processList.at(i)->waitForFinished()) {
+            result->appendProgressError(QString("Process PID: " + QString::number(i) + "failed! Error: "
+                                                + processList.at(i)->errorString()));
+        }
     }
 
     m_result = result;
@@ -231,7 +233,7 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
                 // TODO: this code is important in chain, too! What if chain is the last command, eh?
                 if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
                         ||(i == (m_commands.length() - 1))) {
-                    connectOutputs(current, m_result);                    
+                    connectOutputs(current, m_result);
                 }
 
                 previous->setStandardOutputProcess(current);
