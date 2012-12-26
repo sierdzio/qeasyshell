@@ -212,7 +212,6 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes)
         m_result = new QesResult(this);
 
     if (pes == QProcess::CrashExit) {
-        //m_result->setStdErr(QString("Process PID: " + QString::number(pid) + "failed!").toLocal8Bit());
         m_result->appendProgressError(QString("Process: " + m_commands.at(pid).command() + " failed! Error: "
                                               + m_processList.at(pid)->errorString()));
         return;
