@@ -221,8 +221,6 @@ bool QesCommand::isFinished() const
  */
 void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteArray &input)
 {
-    Q_UNUSED(pid);
-
     if (m_result == NULL)
         m_result = new QesResult(this);
 
