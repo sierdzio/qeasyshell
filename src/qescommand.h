@@ -101,6 +101,8 @@ protected slots:
 
 private:
     void connectOutputs(QesProcess *process, QesResult *result);
+    bool redirectToFile(const QString &filename, const QByteArray &data,
+                        Qes::Pipeline pipe = Qes::Redirect);
 
     bool m_finished;
     int m_currentCommandIndex;

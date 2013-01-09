@@ -180,7 +180,9 @@ QesResult *QesCommand::run(const QByteArray &input)
                     previous->closeWriteChannel();
                 }
             }
-        } else if (pipeline == Qes::Chain) {
+        } else if ((pipeline == Qes::Chain)
+                   || (pipeline == Qes::Redirect)
+                   || (pipeline == Qes::RedirectAppend)) {
             // In a chain, we must wait for pre-chain commands to finish
             if (i > 0)
                 previous->start(m_commands.at(i - 1).command());
@@ -192,6 +194,12 @@ QesResult *QesCommand::run(const QByteArray &input)
 
             for(int j = 0; j < i; ++j) {
                 processList.at(j)->waitForFinished();
+
+                if ((j == i - 1)
+                        && (pipeline == Qes::Redirect || pipeline == Qes::RedirectAppend)) {
+                    redirectToFile(m_commands.at(j).command(), processList.at(j)->readAll(),
+                                   pipeline);
+                }
             }
 
             connectOutputs(current, result);
@@ -384,6 +392,11 @@ void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
             result, SLOT(appendStdOut(const QByteArray &)));
     connect(process, SIGNAL(readyReadStandardError(const QByteArray &, int)),
             result, SLOT(appendStdErr(const QByteArray &)));
+}
+
+bool QesCommand::redirectToFile(const QString &filename, const QByteArray &data, Qes::Pipeline pipe)
+{
+    // need to add QProcess::Channel
 }
 
 /*!
