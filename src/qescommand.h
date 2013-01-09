@@ -57,7 +57,8 @@ public:
     QesCommand *chain(const QString &command);
     QesCommand *chain(QesCommand *command);
 
-    QesCommand *redirect(const QString &destination, bool append = false,
+    QesCommand *redirect(const QString &destination,
+                         Qes::Pipeline redirectionMode = Qes::Redirect,
                          QProcess::ProcessChannel channel = QProcess::StandardOutput);
     QesCommand *operator >>(const QString &destination);
 

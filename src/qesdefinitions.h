@@ -31,10 +31,11 @@ struct QEASYSHELLSHARED_EXPORT Qes {
       Specifies the piping mechanism to use. Defaults to none (for a single command).
       */
     enum Pipeline {
-        None     = 0,
-        Chain    = 1,
-        Pipe     = 2,
-        Redirect = 3
+        None           = 0,
+        Chain          = 1,
+        Pipe           = 2,
+        Redirect       = 3,
+        RedirectAppend = 4
     };
 
     /*!

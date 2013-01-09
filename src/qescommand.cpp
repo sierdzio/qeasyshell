@@ -117,23 +117,29 @@ QesCommand *QesCommand::chain(QesCommand *command)
 }
 
 /*!
-  NOT implemented yet.
+  Adds a redirection command to the command chain. You can choose between
+  Qes::Redirect and Qes::RedirectAppend.
+
+  \sa operator>>()
   */
-QesCommand *QesCommand::redirect(const QString &destination, bool append, QProcess::ProcessChannel channel)
+QesCommand *QesCommand::redirect(const QString &destination,
+                                 Qes::Pipeline redirectionMode,
+                                 QProcess::ProcessChannel channel)
 {
-    Q_UNUSED(append);
     Q_UNUSED(channel);
 
-    m_commands.append(QesSubCommand(destination, Qes::Redirect));
+    m_commands.append(QesSubCommand(destination, redirectionMode));
     return this;
 }
 
 /*!
-  NOT implemented yet.
+  A nice overload for redirect().
+
+  \sa redirect
   */
 QesCommand *QesCommand::operator >>(const QString &destination)
 {
-    return redirect(destination, true, QProcess::StandardOutput);
+    return redirect(destination, Qes::RedirectAppend, QProcess::StandardOutput);
 }
 
 /*!
