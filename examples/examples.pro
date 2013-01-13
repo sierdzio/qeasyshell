@@ -1,8 +1,10 @@
 TEMPLATE = subdirs
 
-SUBDIRS += asynchronous \
+SUBDIRS += \
+    asynchronous \
     basic \
     combiningCommands \
     progressErrorTest \
     inputData \
-    naturalSyntax
+    naturalSyntax \
+    redirection
