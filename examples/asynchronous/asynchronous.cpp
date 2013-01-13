@@ -7,6 +7,20 @@
 #include <QCoreApplication>
 #include "detachedexecution.h"
 
+/*!
+  \defgroup exampleAsynchronous Asynchronous Example
+  @{
+  This example shows how to use QEasyShell asynchronous API.
+  \snippet asynchronous.cpp AsynchronousExample
+
+  Header:
+  \snippet detachedexecution.h AsyncClassHeaderExample
+
+  Source:
+  \snippet detachedexecution.cpp AsyncClassSourceExample
+  */
+
+//! [AsynchronousExample]
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
@@ -16,3 +30,5 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+//! [AsynchronousExample]
+//! @}

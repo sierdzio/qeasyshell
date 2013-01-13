@@ -4,11 +4,22 @@
 #include <QEasyShell>
 #include <QCoreApplication>
 
+/*!
+  \ingroup asynchronousExample
+  @{
+  */
+//! [AsyncClassSourceExample]
+/*!
+  Default QObject child constructor.
+  */
 DetachedExecution::DetachedExecution(QObject *parent) :
     QObject(parent)
 {
 }
 
+/*!
+  Executes asynchronous Qes commands.
+  */
 void DetachedExecution::exec()
 {
     qDebug() << "================";
@@ -38,3 +49,5 @@ void DetachedExecution::exec()
     qDebug() << "End.";
     QCoreApplication::quit();
 }
+//! [AsyncClassSourceExample]
+//! @}

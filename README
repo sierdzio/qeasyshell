@@ -24,8 +24,10 @@ stage. You can try using it, but I can give no guarantees it will work. A proper
 Win support is planned, though, don't you worry.
 
 \section usage Examples
-For exmamples on how QES can be used in practice, please see the examples folder.
-To put it simply, if you want to run such pipe:
+For exmamples on how QES can be used in practice, please see the examples folder,
+or go to "Modules" section in HTML documentation.
+
+In the meantime, a short example. If you want to run such pipe:
 \verbatim
 env | grep USER && pwd | wc
 \endverbatim

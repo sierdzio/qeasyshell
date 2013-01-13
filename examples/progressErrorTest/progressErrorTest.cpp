@@ -7,6 +7,14 @@
 #include <QDebug>
 #include <QEasyShell>
 
+/*!
+  \defgroup exampleProgressError Progress Error Example
+  @{
+  This example is designed to fail, in order to present QES error reporting capabilities.
+  \snippet progressErrorTest.cpp progressExample
+  */
+
+//! [progressExample]
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -32,3 +40,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+//! [progressExample]
+//! @}

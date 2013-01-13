@@ -9,6 +9,15 @@
 #include <QDebug>
 #include <QEasyShell>
 
+/*!
+  \defgroup exampleRedirection Redirection Example
+  @{
+  This presents how command output can be redirected to a file (appending or
+  truncating the output).
+  \snippet redirection.cpp redirectionExample
+  */
+
+//! [redirectionExample]
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -52,3 +61,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+//! [redirectionExample]
+//! @}

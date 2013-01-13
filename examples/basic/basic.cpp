@@ -7,6 +7,13 @@
 #include <QDebug>
 #include <QEasyShell>
 
+/*!
+  \defgroup exampleBasic Basic Example
+  @{
+  This example shows most basic usage of QEasyShell.
+  \snippet basic.cpp BasicExample
+  */
+//! [BasicExample]
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -32,3 +39,6 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+//! [BasicExample]
+
+//! @}

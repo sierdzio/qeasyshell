@@ -7,6 +7,14 @@
 #include <QDebug>
 #include <QEasyShell>
 
+/*!
+  \defgroup exampleCombining Combining Commands Example
+  @{
+  This example shows how different command objects can be combined to form a chain.
+  \snippet combiningCommands.cpp ccExample
+  */
+
+//! [ccExample]
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -34,3 +42,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+//! [ccExample]
+//! @}

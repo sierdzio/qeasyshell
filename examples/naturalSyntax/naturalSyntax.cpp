@@ -7,6 +7,15 @@
 #include <QDebug>
 #include <QEasyShell>
 
+/*!
+  \defgroup exampleNaturalSyntax Natural Syntax Example
+  @{
+  Shows how natural (bash-like) syntax can be used in QEasyShell. It has some
+  limitations, but can be used in many situations.
+  \snippet naturalSyntax.cpp naturalExample
+  */
+
+//! [naturalExample]
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -32,3 +41,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+//! [naturalExample]
+//! @}

@@ -7,6 +7,14 @@
 #include <QDebug>
 #include <QEasyShell>
 
+/*!
+  \defgroup exampleInputData Input Data Example
+  @{
+  Shows how external data can be provided to prime first command in chain.
+  \snippet inputData.cpp inputExample
+  */
+
+//! [inputExample]
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc);
@@ -32,3 +40,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+//! [inputExample]
+//! @}
