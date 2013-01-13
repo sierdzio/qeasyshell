@@ -2,9 +2,7 @@
 
 QES tries to make invoking and communicating with shell scripts easy in Qt/C++.
 It is a library that allows for straightforward invocation of shell commands and
-joining them into pipes and chains.
-
-QES sports both a synchronous and an asynchronous API.
+joining them into pipes and chains. QES sports both a synchronous and an asynchronous API.
 
 Please take note that this project is quite young, some parts are missing, others note
 really tested. Use at your own risk and please consider helping me out
@@ -13,9 +11,8 @@ really tested. Use at your own risk and please consider helping me out
 \section building Compiling QES
 QEasyShell requires QtCore library and a working C++ compiler. That's it! Just
 open qeasyshell.pro in QtCreator or run qmake qeasyshell.pro to get started.
-
 No shadow building required, QES automatically puts all the results in build/
-and all libraries in lib/.
+and all libraries in lib/. Code is compatible with both Qt 4 and Qt 5.
 
 Building the documentation requires doxygen. Just run doxygen qeasyshell.docconf
 in project's root directory.

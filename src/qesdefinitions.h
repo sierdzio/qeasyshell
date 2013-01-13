@@ -34,8 +34,8 @@ struct QEASYSHELLSHARED_EXPORT Qes {
         None           = 0,
         Chain          = 1,
         Pipe           = 2,
-        Redirect       = 3,
-        RedirectAppend = 4
+        Redirect       = 4,
+        RedirectAppend = 8
     };
 
     /*!

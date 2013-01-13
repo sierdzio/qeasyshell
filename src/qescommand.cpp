@@ -159,11 +159,27 @@ QesResult *QesCommand::run(const QByteArray &input)
     ProcessList processList;
 
     for(int i = 0; i < m_commands.length(); ++i) {
+        int previousIndex = i - 1;
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
+
+        // Skip process creation for redirection. It just needs to write
+        // output.
+        if (m_commands.at(previousIndex).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
+            --previousIndex;
+        }
+
+        if (pipeline & (Qes::Redirect | Qes::RedirectAppend)) {
+            redirectToFile(m_commands.at(i).command(), processList.at(previousIndex)->readAll(),
+                           pipeline);
+
+            ++i;
+            pipeline = m_commands.at(i).pipeline();
+        }
+
         processList.append(new QesProcess(i, this));
 
         QesProcess *current = processList.at(i);
-        QesProcess *previous = (i != 0)? processList.at(i - 1) : 0;
+        QesProcess *previous = (i != 0)? processList.at(previousIndex) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
@@ -173,19 +189,17 @@ QesResult *QesCommand::run(const QByteArray &input)
 
             if (i != 0) {
                 previous->setStandardOutputProcess(current);
-                previous->start(m_commands.at(i - 1).command());
+                previous->start(m_commands.at(previousIndex).command());
 
                 if (i == 1) {
                     previous->write(input);
                     previous->closeWriteChannel();
                 }
             }
-        } else if ((pipeline == Qes::Chain)
-                   || (pipeline == Qes::Redirect)
-                   || (pipeline == Qes::RedirectAppend)) {
+        } else if (pipeline == Qes::Chain) {
             // In a chain, we must wait for pre-chain commands to finish
             if (i > 0)
-                previous->start(m_commands.at(i - 1).command());
+                previous->start(m_commands.at(previousIndex).command());
 
             if (i == 1) {
                 previous->write(input);
@@ -193,13 +207,7 @@ QesResult *QesCommand::run(const QByteArray &input)
             }
 
             for(int j = 0; j < i; ++j) {
-                processList.at(j)->waitForFinished();
-
-                if ((j == i - 1)
-                        && (pipeline == Qes::Redirect || pipeline == Qes::RedirectAppend)) {
-                    redirectToFile(m_commands.at(j).command(), processList.at(j)->readAll(),
-                                   pipeline);
-                }
+                processList.at(j)->waitForFinished();                
             }
 
             connectOutputs(current, result);
@@ -299,12 +307,27 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
 
     for(int i = m_currentCommandIndex; i < m_commands.length(); ++i) {
         bool takeABreak = false;
+        int previousIndex = i - 1;
         m_currentCommandIndex = i;
         Qes::Pipeline pipeline = m_commands.at(i).pipeline();
+
+        // Skip process creation for redirection. It just needs to write
+        // output.
+        if (m_commands.at(previousIndex).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
+            --previousIndex;
+        }
+
+        if (pipeline & (Qes::Redirect | Qes::RedirectAppend)) {
+            ++i;
+            ++m_currentCommandIndex;
+            //--previousIndex;
+            pipeline = m_commands.at(i).pipeline();
+        }
+
         m_processList.append(new QesProcess(i, this));
 
         QesProcess *current = m_processList.at(i);
-        QesProcess *previous = (i != 0)? m_processList.at(i - 1) : 0;
+        QesProcess *previous = (i != 0)? m_processList.at(previousIndex) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             // TODO: this code is important in chain, too! What if chain is the last command, eh?
@@ -314,8 +337,13 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
             }
 
             if (i != 0) {
-                previous->setStandardOutputProcess(current);
-                previous->start(m_commands.at(i - 1).command());
+                if (m_commands.at(i - 1).pipeline() == Qes::Redirect)
+                    previous->setStandardOutputFile(m_commands.at(i - 1).command(), QIODevice::Truncate);
+                else if (m_commands.at(i - 1).pipeline() == Qes::RedirectAppend)
+                    previous->setStandardOutputFile(m_commands.at(i - 1).command(), QIODevice::Append);
+                else
+                    previous->setStandardOutputProcess(current);
+                previous->start(m_commands.at(previousIndex).command());
 
                 if (i == 1) {
                     previous->write(input);
@@ -323,7 +351,7 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
                 }
             }
         } else if (pipeline == Qes::Chain) {
-            previous->start(m_commands.at(i - 1).command());
+            previous->start(m_commands.at(previousIndex).command());
 
             if (i == 1) {
                 previous->write(input);
@@ -394,15 +422,39 @@ void QesCommand::connectOutputs(QesProcess *process, QesResult *result)
             result, SLOT(appendStdErr(const QByteArray &)));
 }
 
+/*!
+  Writes data to file specified in redirect command. Returns true on success,
+  otherwise returns false.
+
+  Requires to specify the output \a filename, \a data to write and write mode
+  designated in \a pipe (Redirect or RedirectAppend).
+  */
 bool QesCommand::redirectToFile(const QString &filename, const QByteArray &data, Qes::Pipeline pipe)
 {
     // need to add QProcess::Channel
+
+    QFile file(filename);
+
+    if (pipe == Qes::Redirect) {
+        if (!file.open(QIODevice::Truncate | QIODevice::Text | QIODevice::WriteOnly))
+            return false;
+    } else if (pipe == Qes::RedirectAppend) {
+        if (!file.open(QIODevice::Append | QIODevice::Text | QIODevice::WriteOnly))
+            return false;
+    }
+
+    if (file.write(data) == -1) {
+        return false;
+    }
+
+    file.close();
+    return true;
 }
 
 /*!
   Performs the actions needed to finalise detahed command execution.
 
-  Emitts finished() signals.
+  Emits finished() signals.
  */
 void QesCommand::aboutToFinish()
 {
