@@ -164,14 +164,12 @@ QesResult *QesCommand::run(const QByteArray &input)
 
         // Skip process creation for redirection. It just needs to write
         // output.
-        if (m_commands.at(previousIndex).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
+        if ((previousIndex >= 0) && (m_commands.at(previousIndex).pipeline() & (Qes::Redirect | Qes::RedirectAppend))) {
             --previousIndex;
         }
 
         if (pipeline & (Qes::Redirect | Qes::RedirectAppend)) {
-            redirectToFile(m_commands.at(i).command(), processList.at(previousIndex)->readAll(),
-                           pipeline);
-
+            processList.append(new QesProcess(i, this));
             ++i;
             pipeline = m_commands.at(i).pipeline();
         }
@@ -188,8 +186,21 @@ QesResult *QesCommand::run(const QByteArray &input)
             }
 
             if (i != 0) {
-                previous->setStandardOutputProcess(current);
+                if (m_commands.at(i - 1).pipeline() == Qes::Redirect) {
+                    previous->setStandardOutputFile(m_commands.at(i - 1).command(), QIODevice::Truncate);
+                    previous->setStandardErrorFile(m_commands.at(i - 1).command(), QIODevice::Truncate);
+                } else if (m_commands.at(i - 1).pipeline() == Qes::RedirectAppend) {
+                    previous->setStandardOutputFile(m_commands.at(i - 1).command(), QIODevice::Append);
+                    previous->setStandardErrorFile(m_commands.at(i - 1).command(), QIODevice::Append);
+                } else {
+
+                    previous->setStandardOutputProcess(current);
+                }
+
                 previous->start(m_commands.at(previousIndex).command());
+                if ((i >= 2) && (m_commands.at(i - 1).pipeline() & (Qes::Redirect | Qes::RedirectAppend))) {
+                    previous->closeWriteChannel();
+                }
 
                 if (i == 1) {
                     previous->write(input);
@@ -207,7 +218,8 @@ QesResult *QesCommand::run(const QByteArray &input)
             }
 
             for(int j = 0; j < i; ++j) {
-                processList.at(j)->waitForFinished();                
+                if (processList.at(j)->state() != QProcess::NotRunning)
+                    processList.at(j)->waitForFinished();
             }
 
             connectOutputs(current, result);
@@ -216,6 +228,10 @@ QesResult *QesCommand::run(const QByteArray &input)
 
     // This will do nothing if last command was chained
     processList.last()->start(m_commands.last().command());
+    if ((m_commands.length() >= 3) && (m_commands.at(m_commands.length() - 2).pipeline()
+                                       & (Qes::Redirect | Qes::RedirectAppend))) {
+        processList.last()->closeWriteChannel();
+    }
 
     if (m_commands.length() == 1) {
         processList.last()->write(input);
@@ -223,7 +239,15 @@ QesResult *QesCommand::run(const QByteArray &input)
     }
 
     for(int i = 0; i < m_commands.length(); ++i) {
-        processList.at(i)->waitForFinished();
+        if (processList.at(i)->state() != QProcess::NotRunning) {
+//            processList.at(i)->closeWriteChannel();
+            processList.at(i)->waitForFinished();
+        }
+
+//        if (m_commands.at(i).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
+//            redirectToFile(m_commands.at(i).command(), processList.at(i - 1)->readAll(),
+//                           m_commands.at(i).pipeline());
+//        }
 
         if (processList.at(i)->isError()) {
             result->appendProgressError(QString("Process: " + m_commands.at(i).command() + " failed! Error: "
@@ -313,11 +337,12 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
 
         // Skip process creation for redirection. It just needs to write
         // output.
-        if (m_commands.at(previousIndex).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
+        if ((previousIndex >= 0) && (m_commands.at(previousIndex).pipeline() & (Qes::Redirect | Qes::RedirectAppend))) {
             --previousIndex;
         }
 
         if (pipeline & (Qes::Redirect | Qes::RedirectAppend)) {
+            m_processList.append(new QesProcess(i, this));
             ++i;
             ++m_currentCommandIndex;
             //--previousIndex;
@@ -337,12 +362,15 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
             }
 
             if (i != 0) {
-                if (m_commands.at(i - 1).pipeline() == Qes::Redirect)
+                if (m_commands.at(i - 1).pipeline() == Qes::Redirect) {
                     previous->setStandardOutputFile(m_commands.at(i - 1).command(), QIODevice::Truncate);
-                else if (m_commands.at(i - 1).pipeline() == Qes::RedirectAppend)
+                    previous->setStandardErrorFile(m_commands.at(i - 1).command(), QIODevice::Truncate);
+                } else if (m_commands.at(i - 1).pipeline() == Qes::RedirectAppend) {
                     previous->setStandardOutputFile(m_commands.at(i - 1).command(), QIODevice::Append);
-                else
+                    previous->setStandardErrorFile(m_commands.at(i - 1).command(), QIODevice::Append);
+                } else {
                     previous->setStandardOutputProcess(current);
+                }
                 previous->start(m_commands.at(previousIndex).command());
 
                 if (i == 1) {

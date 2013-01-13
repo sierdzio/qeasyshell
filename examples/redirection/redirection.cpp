@@ -17,10 +17,10 @@ int main(int argc, char *argv[])
     qDebug() << "================";
     qDebug() << "QEasyShell example - redirection.";
     QesCommand truncate("env");
-    QesResult *resultTruncate = truncate.pipe("grep USER")->redirect("result")->pipe("wc")->run();
+    QesResult *resultTruncate = truncate.pipe("grep USER")->redirect("result.txt")->pipe("wc")->run();
 
     QesCommand append("env");
-    QesResult *resultAppend = append.pipe("grep USER")->redirect("result", Qes::RedirectAppend)->pipe("wc")->run();
+    QesResult *resultAppend = append.pipe("grep USER")->redirect("result.txt", Qes::RedirectAppend)->pipe("wc")->run();
     qDebug() << "Truncate command is:" << truncate.command();
     qDebug() << "Append command is:" << append.command();
 
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "================";
     qDebug() << "=Resulting file=";
-    QFile file("result");
+    QFile file("result.txt");
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     qDebug() << file.readAll();
     file.close();

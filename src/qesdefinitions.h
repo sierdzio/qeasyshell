@@ -65,6 +65,8 @@ struct QEASYSHELLSHARED_EXPORT Qes {
         else if (pl == Pipe)
             return " | ";
         else if (pl == Redirect)
+            return " > ";
+        else if (pl == RedirectAppend)
             return " >> ";
 
         return QString();
