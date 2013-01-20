@@ -11,6 +11,9 @@
 
 /*!
   Initialises the command object with it's first \a command string.
+
+  If \a windowsCompatibility is turned on, QEasyShell will try to make commands
+  work on Windows platform (it will add cmd.exe invocations automatically).
   */
 QesCommand::QesCommand(const QString &command, bool windowsCompatibility,
                        QObject *parent) :
@@ -486,6 +489,11 @@ bool QesCommand::redirectToFile(const QString &filename, const QByteArray &data,
     return true;
 }
 
+/*!
+  Tries to fix a call if it may not work.
+
+  Especially needed on Windows, together with \a windowsMode set to true.
+  */
 QString QesCommand::prepareCommand(const QString &command, bool windowsMode)
 {
     QString commandToRun(command);

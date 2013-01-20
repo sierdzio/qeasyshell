@@ -40,6 +40,11 @@
   QesResult *r= QesCommand("env").pipe("grep USER")->chain("pwd")->pipe("wc")->run();
   printf(qPrintable(r->toString()), NULL);
   \endverbatim
+
+  QesCommand also has a Windows compatibility mode. You can turn it on in
+  the constructor. If that flag is set to true, QES will try to make certain
+  commands work on Windows by adding cmd.exe invocation. This feature is quite experimental
+  at the moment.
   */
 class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 {

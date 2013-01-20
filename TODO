@@ -12,5 +12,4 @@ new and existing entries!
 \li add support for passing shell script strings to execute
 \li add specialised command classes (like QesGrep etc.) to make it easier to
     invoke some of them
-\li add MS Windows support, if possible
 */
