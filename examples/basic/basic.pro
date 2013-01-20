@@ -5,17 +5,9 @@
 #-------------------------------------------------
 
 include(../../global.pri)
-
-QT       = core
+include(../exampleConfig.pri)
 
 TARGET   = basic
-CONFIG   += console
-CONFIG   -= app_bundle
-TEMPLATE = app
-DESTDIR  = $${EXEC_DIRECTORY}
-
-INCLUDEPATH += $${ROOT_DIRECTORY}/src
-LIBS        += -L$${LIB_DIRECTORY} -lQEasyShell
 
 SOURCES += \
     basic.cpp

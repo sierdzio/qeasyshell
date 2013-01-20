@@ -47,6 +47,7 @@ class QEASYSHELLSHARED_EXPORT QesCommand : public QObject
 
 public:
     explicit QesCommand(const QString &command,
+                        bool windowsCompatibility = false,
                         QObject *parent = 0);
 
     QesCommand *pipe(const QString &command);
@@ -103,8 +104,10 @@ private:
     void connectOutputs(QesProcess *process, QesResult *result);
     bool redirectToFile(const QString &filename, const QByteArray &data,
                         Qes::Pipeline pipe = Qes::Redirect);
+    QString prepareCommand(const QString &command, bool windowsMode = false);
 
     bool m_finished;
+    bool m_windowsCompatibility;
     int m_currentCommandIndex;
     CommandList m_commands;
     ProcessList m_processList;

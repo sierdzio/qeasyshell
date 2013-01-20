@@ -12,9 +12,9 @@
 /*!
   Initialises the command object with it's first \a command string.
   */
-QesCommand::QesCommand(const QString &command,
+QesCommand::QesCommand(const QString &command, bool windowsCompatibility,
                        QObject *parent) :
-    QObject(parent)
+    QObject(parent), m_windowsCompatibility(windowsCompatibility)
 {
     m_finished = false;
     m_commands.append(QesSubCommand(command));
@@ -197,7 +197,8 @@ QesResult *QesCommand::run(const QByteArray &input)
                     previous->setStandardOutputProcess(current);
                 }
 
-                previous->start(m_commands.at(previousIndex).command());
+                previous->start(prepareCommand(m_commands.at(previousIndex).command(),
+                                               m_windowsCompatibility));
                 if ((i >= 2) && (m_commands.at(i - 1).pipeline() & (Qes::Redirect | Qes::RedirectAppend))) {
                     previous->closeWriteChannel();
                 }
@@ -209,8 +210,10 @@ QesResult *QesCommand::run(const QByteArray &input)
             }
         } else if (pipeline == Qes::Chain) {
             // In a chain, we must wait for pre-chain commands to finish
-            if (i > 0)
-                previous->start(m_commands.at(previousIndex).command());
+            if (i > 0) {
+                previous->start(prepareCommand(m_commands.at(previousIndex).command(),
+                                               m_windowsCompatibility));
+            }
 
             if (i == 1) {
                 previous->write(input);
@@ -227,7 +230,8 @@ QesResult *QesCommand::run(const QByteArray &input)
     }
 
     // This will do nothing if last command was chained
-    processList.last()->start(m_commands.last().command());
+    processList.last()->start(prepareCommand(m_commands.last().command(),
+                                             m_windowsCompatibility));
     if ((m_commands.length() >= 3) && (m_commands.at(m_commands.length() - 2).pipeline()
                                        & (Qes::Redirect | Qes::RedirectAppend))) {
         processList.last()->closeWriteChannel();
@@ -240,14 +244,14 @@ QesResult *QesCommand::run(const QByteArray &input)
 
     for(int i = 0; i < m_commands.length(); ++i) {
         if (processList.at(i)->state() != QProcess::NotRunning) {
-//            processList.at(i)->closeWriteChannel();
+            //            processList.at(i)->closeWriteChannel();
             processList.at(i)->waitForFinished();
         }
 
-//        if (m_commands.at(i).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
-//            redirectToFile(m_commands.at(i).command(), processList.at(i - 1)->readAll(),
-//                           m_commands.at(i).pipeline());
-//        }
+        //        if (m_commands.at(i).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
+        //            redirectToFile(m_commands.at(i).command(), processList.at(i - 1)->readAll(),
+        //                           m_commands.at(i).pipeline());
+        //        }
 
         if (processList.at(i)->isError()) {
             result->appendProgressError(QString("Process: " + m_commands.at(i).command() + " failed! Error: "
@@ -371,7 +375,8 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
                 } else {
                     previous->setStandardOutputProcess(current);
                 }
-                previous->start(m_commands.at(previousIndex).command());
+                previous->start(prepareCommand(m_commands.at(previousIndex).command(),
+                                               m_windowsCompatibility));
 
                 if (i == 1) {
                     previous->write(input);
@@ -379,7 +384,8 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
                 }
             }
         } else if (pipeline == Qes::Chain) {
-            previous->start(m_commands.at(previousIndex).command());
+            previous->start(prepareCommand(m_commands.at(previousIndex).command(),
+                                           m_windowsCompatibility));
 
             if (i == 1) {
                 previous->write(input);
@@ -394,7 +400,8 @@ void QesCommand::processNextStep(int pid, QProcess::ExitStatus pes, const QByteA
         }
 
         if (i == (m_commands.length() - 1)) {
-            current->start(m_commands.at(i).command());
+            current->start(prepareCommand(m_commands.at(i).command(),
+                                          m_windowsCompatibility));
             connect(current, SIGNAL(finished(int)), this, SLOT(aboutToFinish()));
         }
 
@@ -477,6 +484,18 @@ bool QesCommand::redirectToFile(const QString &filename, const QByteArray &data,
 
     file.close();
     return true;
+}
+
+QString QesCommand::prepareCommand(const QString &command, bool windowsMode)
+{
+    QString commandToRun(command);
+    if (windowsMode) {
+        if (!commandToRun.contains("cmd.exe")) {
+            commandToRun.prepend("cmd.exe /C ");
+        }
+    }
+
+    return commandToRun;
 }
 
 /*!

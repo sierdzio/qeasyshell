@@ -7,4 +7,5 @@ SUBDIRS += \
     progressErrorTest \
     inputData \
     naturalSyntax \
-    redirection
+    redirection \
+    windowsBasic

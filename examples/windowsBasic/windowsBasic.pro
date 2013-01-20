@@ -1,13 +1,13 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-01-13T13:06:06
+# Project created by QtCreator 2013-01-20T15:11:16
 #
 #-------------------------------------------------
 
 include(../../global.pri)
 include(../exampleConfig.pri)
 
-TARGET   = redirection
+TARGET   = windowsBasic
 
 SOURCES += \
-    redirection.cpp
+    windowsBasic.cpp

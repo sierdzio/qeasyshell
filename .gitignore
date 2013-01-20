@@ -7,3 +7,6 @@ Makefile
 build/
 lib/
 doc/
+Makefile.Debug
+Makefile.Release
+*_resource.rc
