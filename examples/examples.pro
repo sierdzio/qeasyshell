@@ -1,6 +1,9 @@
 TEMPLATE = subdirs
 
-SUBDIRS += \
+noexamples {
+  SUBDIRS +=
+} else {
+  SUBDIRS += \
     asynchronous \
     basic \
     combiningCommands \
@@ -9,3 +12,4 @@ SUBDIRS += \
     naturalSyntax \
     redirection \
     windowsBasic
+}

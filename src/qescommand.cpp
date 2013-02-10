@@ -498,6 +498,7 @@ QString QesCommand::prepareCommand(const QString &command, bool windowsMode)
 {
     QString commandToRun(command);
     if (windowsMode) {
+        // TODO: use PowerShell if available
         if (!commandToRun.contains("cmd.exe")) {
             commandToRun.prepend("cmd.exe /C ");
         }

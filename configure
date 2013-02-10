@@ -1,0 +1,60 @@
+#!/bin/sh
+# Usage: configure [flags]
+#
+# Configure script prepares project for building with make.
+# It offers several flag that help getting desired output.
+#
+# Use ./configure --help to get more info (or look at the code!)
+set -e
+
+IS_STATIC=false
+BUILD_EXAMPLES=true
+
+for OPTION in "$@"
+do
+  if [ "$OPTION" = "-h" ] || [ "$OPTION" = "--help" ]; then
+    echo "configure script for QEasyShell. Copyright (c) 2013, Tomasz Siekierda."
+    echo "Please see LICENSE file or display it here with -l flag."
+    echo "This is free software uder WTFPL license."
+    echo
+    echo "Usage: configure [flags]"
+    echo
+    echo "Configure script prepares project for building with make."
+    echo "It offers several flag that help getting desired output."
+    echo "Prerequisites for build: qmake in PATH, QtCore module installed. Both"
+    echo "Qt4 and Qt5 are supported."
+    echo "This script is likely to grow in features as time progresses. Right now"
+    echo "It's pretty basic."
+    echo
+    echo "Flags:"
+    echo " - -h, --help - display this message"
+    echo " - -l, --license - display license text (requires 'less' to be in PATH)"
+    echo " - -s, --static - compile the library and examples in static mode"
+    echo " - -n, --no-examples - do not compile examples"
+    return 0
+  else if [ "$OPTION" = "-l" ] || [ "$OPTION" = "--license" ]; then
+    less LICENSE
+    return 0
+  else if [ "$OPTION" = "-s" ] || [ "$OPTION" = "--static" ]; then
+    IS_STATIC=true
+  else if [ "$OPTION" = "-n" ] || [ "$OPTION" = "--no-examples" ]; then
+    BUILD_EXAMPLES=false
+  fi
+done
+
+COMMAND="qmake"
+FLAGS=""
+PROJECT_FILE=" qeasyshell.pro"
+
+if IS_STATIC ; then
+  FLAGS+=" CONFIG=+static"
+fi
+
+if BUILD_EXAMPLES ; then
+  FLAGS+=" CONFIG=+noexamples"
+fi
+
+RESULT=$COMMAND+$FLAGS+$PROJECT_FILE
+
+echo Building with options: $RESULT
+

@@ -11,7 +11,15 @@ TEMPLATE = lib
 VERSION = 1.0.0
 
 DEFINES += QEASYSHELL_LIBRARY
-DEFINES += DEBUG
+
+#DEFINES += DEBUG
+
+static {
+  message("Library built in static mode")
+  CONFIG += staticlib
+} else {
+  message("Library building in shared mode")
+}
 
 SOURCES += \
            qescommand.cpp \
