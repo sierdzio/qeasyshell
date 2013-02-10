@@ -9,13 +9,20 @@ really tested. Use at your own risk and please consider helping me out
 (see \ref copyright "Copyright and contributions" section below for more info).
 
 \section building Compiling QES
-QEasyShell requires QtCore library and a working C++ compiler. That's it! Just
-open qeasyshell.pro in QtCreator or run qmake qeasyshell.pro to get started.
-No shadow building required, QES automatically puts all the results in build/
-and all libraries in lib/. Code is compatible with both Qt 4 and Qt 5.
+QEasyShell requires QtCore library and a working C++ compiler. That's it!
+
+There are 3 standard ways to build QES:
+\li just open qeasyshell.pro in QtCreator
+\li standard Unix way - run ./configure (check out --help flag first), then make
+\li run qmake qeasyshell.pro.
+No shadow building required, QES automatically puts all the results in build/.
+Code is compatible with both Qt 4 and Qt 5. You can compile statically using
+CONFIG+=static and skip building examples using CONFIG+=noexamples passed to qmake.
 
 Building the documentation requires doxygen. Just run doxygen qeasyshell.docconf
-in project's root directory.
+in project's root directory and look for the output in doc/html/index.html. You
+can also modify the script to produce QCH, PDF, LaTeX output. See doxygen
+documentation.
 
 \section warning Warning - platform compatibility
 QES is developed and tested under Linux, but should work well on all UNIX-like
