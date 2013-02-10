@@ -31,6 +31,8 @@ do
     echo " - -l, --license - display license text (requires 'less' to be in PATH)"
     echo " - -s, --static - compile the library and examples in static mode"
     echo " - -n, --no-examples - do not compile examples"
+    echo
+    echo "Configure cleans the project (make clean) before it runs qmake."
     return 0
   elif [ "$OPTION" = "-l" ] || [ "$OPTION" = "--license" ]; then
     less LICENSE
@@ -56,6 +58,8 @@ fi
 
 RESULT=$COMMAND$PROJECT_FILE$FLAGS
 
+echo "Cleaning old build."
+make clean
 echo Building with options: $RESULT
 $RESULT
 echo "Done generating Makefiles. You can now use 'make' to compile your project."
