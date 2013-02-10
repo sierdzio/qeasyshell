@@ -43,8 +43,8 @@ do
 done
 
 COMMAND="qmake"
-FLAGS=""
 PROJECT_FILE=" qeasyshell.pro"
+FLAGS=" -r CONFIG+=release"
 
 if $IS_STATIC ; then
   FLAGS="$FLAGS CONFIG+=static"
@@ -54,7 +54,7 @@ if $NO_EXAMPLES ; then
   FLAGS="$FLAGS CONFIG+=noexamples"
 fi
 
-RESULT=$COMMAND$FLAGS$PROJECT_FILE
+RESULT=$COMMAND$PROJECT_FILE$FLAGS
 
 echo Building with options: $RESULT
 $RESULT
