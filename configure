@@ -8,7 +8,7 @@
 set -e
 
 IS_STATIC=false
-BUILD_EXAMPLES=true
+NO_EXAMPLES=false
 
 for OPTION in "$@"
 do
@@ -32,13 +32,13 @@ do
     echo " - -s, --static - compile the library and examples in static mode"
     echo " - -n, --no-examples - do not compile examples"
     return 0
-  else if [ "$OPTION" = "-l" ] || [ "$OPTION" = "--license" ]; then
+  elif [ "$OPTION" = "-l" ] || [ "$OPTION" = "--license" ]; then
     less LICENSE
     return 0
-  else if [ "$OPTION" = "-s" ] || [ "$OPTION" = "--static" ]; then
+  elif [ "$OPTION" = "-s" ] || [ "$OPTION" = "--static" ]; then
     IS_STATIC=true
-  else if [ "$OPTION" = "-n" ] || [ "$OPTION" = "--no-examples" ]; then
-    BUILD_EXAMPLES=false
+  elif [ "$OPTION" = "-n" ] || [ "$OPTION" = "--no-examples" ]; then
+    NO_EXAMPLES=true
   fi
 done
 
@@ -46,15 +46,15 @@ COMMAND="qmake"
 FLAGS=""
 PROJECT_FILE=" qeasyshell.pro"
 
-if IS_STATIC ; then
-  FLAGS+=" CONFIG=+static"
+if $IS_STATIC ; then
+  FLAGS="$FLAGS CONFIG+=static"
 fi
 
-if BUILD_EXAMPLES ; then
-  FLAGS+=" CONFIG=+noexamples"
+if $NO_EXAMPLES ; then
+  FLAGS="$FLAGS CONFIG+=noexamples"
 fi
 
-RESULT=$COMMAND+$FLAGS+$PROJECT_FILE
+RESULT=$COMMAND$FLAGS$PROJECT_FILE
 
 echo Building with options: $RESULT
 
