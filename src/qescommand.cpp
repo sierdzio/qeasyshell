@@ -285,6 +285,36 @@ void QesCommand::runDetached(const QByteArray &input)
 }
 
 /*!
+  Attempts to peacefully terminate all processes spawned by this QesCommand.
+  It does not clear command list (you can rerun command chain), nor does it
+  clean the QesResult object - you can still access it and get any data that was
+  produced by running commands before they were terminated.
+
+  \sa clear, result, killAll
+  */
+void QesCommand::terminateAll()
+{
+    foreach (QesProcess *p, m_processList) {
+        p->terminate();
+    }
+}
+
+/*!
+  Forcibly kills (immediately) all processes spawned by this QesCommand.
+  It does not clear command list (you can rerun command chain), nor does it
+  clean the QesResult object - you can still access it and get any data that was
+  produced by running commands before they were killed.
+
+  \sa clear, result, terminateAll
+  */
+void QesCommand::killAll()
+{
+    foreach (QesProcess *p, m_processList) {
+        p->kill();
+    }
+}
+
+/*!
   Returns a result of the command. Is null if no command was run.
 
   To check if there were any errors, you can use the QesResult object's error() method.
@@ -445,6 +475,21 @@ QString QesCommand::command() const
 CommandList QesCommand::commandList() const
 {
     return m_commands;
+}
+
+/*!
+  Clear method lists. Method will bail out if processes are already running!
+  */
+void QesCommand::clear()
+{
+    foreach (QesProcess *p, m_processList) {
+        if (p->state() != QProcess::NotRunning) {
+            return;
+        }
+    }
+
+    clearMembers();
+    m_commands.clear();
 }
 
 /*!

@@ -34,6 +34,12 @@
   all commands in the background. Once the result is ready, it will emit finished()
   and the output will be ready under result().
 
+  Result object is returned as a pointer, and QEasyShell will never destroy it.
+  You need to delete it when you see fit.
+
+  Command list is not cleared after execution - you can rerun QesCommand at will.
+  To clear command list, use QesCommand::clear() method.
+
   See QES examples to see it in action, here is just a tiny example of synchronous
   run:
   \verbatim
@@ -71,6 +77,8 @@ public:
 
     QesResult *run(const QByteArray &input = QByteArray());
     void runDetached(const QByteArray &input = QByteArray());
+    void terminateAll();
+    void killAll();
 
     QesResult *result() const;
     bool isResultReady() const;
@@ -78,6 +86,7 @@ public:
 
     QString command() const;
     CommandList commandList() const;
+    void clear();
 
 signals:
     /*!
