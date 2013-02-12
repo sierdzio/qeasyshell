@@ -527,6 +527,7 @@ void QesCommand::clearMembers()
 void QesCommand::aboutToFinish()
 {
     clearMembers();
+    m_finished = true;
     emit finished();
     emit finished(m_result);
 }
