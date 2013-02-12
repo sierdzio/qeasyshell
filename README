@@ -15,6 +15,7 @@ There are 3 standard ways to build QES:
 \li just open qeasyshell.pro in QtCreator
 \li standard Unix way - run ./configure (check out --help flag first), then make
 \li run qmake qeasyshell.pro.
+
 No shadow building required, QES automatically puts all the results in build/.
 Code is compatible with both Qt 4 and Qt 5. You can compile statically using
 CONFIG+=static and skip building examples using CONFIG+=noexamples passed to qmake.

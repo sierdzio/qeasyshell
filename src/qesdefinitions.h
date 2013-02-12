@@ -20,22 +20,34 @@ struct QEASYSHELLSHARED_EXPORT Qes {
       NOTE: this is not being used at all right now.
       */
     enum Shell {
-        OS   = 0,
-        Sh   = 1,
-        Bash = 2,
-        Tcsh = 3,
-        Zsh  = 4
+        OS         = 0, //! Use QES default (bash/cmd.exe)
+        Sh         = 1, //! Use /usr/bin/sh
+        Bash       = 2, //! Use /usr/bin/bash
+        Tcsh       = 3, //! Use /usr/bin/tcsh
+        Zsh        = 4, //! Use /usr/bin/zsh
+        PowerShell = 5  //! Use PowerShell (Windows only)
     };
 
     /*!
       Specifies the piping mechanism to use. Defaults to none (for a single command).
       */
     enum Pipeline {
-        None           = 0,
-        Chain          = 1,
-        Pipe           = 2,
-        Redirect       = 4,
-        RedirectAppend = 8
+        None           = 0, //! Used for the first command in chain, instructs QES to
+                            //! ignore previous entries.
+
+        Chain          = 1, //! Equivalent of "&&" in shell. Does not pass data between previous
+                            //! and current commands.
+
+        Pipe           = 2, //! Equivalent of "|" in shell. Routes output of previous
+                            //! command as input of current one.
+
+        Redirect       = 4, //! Used at the end of a chain redirects output of the command
+                            //! to a file (if it already exists, it will be removed).
+                            //! Equivalent to '>' in shell.
+
+        RedirectAppend = 8  //! Used at the end of a chain redirects output of the command
+                            //! to a file (if it already exists, data will be appended).
+                            //! Equivalent to ">>" in shell.
     };
 
     /*!
@@ -52,6 +64,8 @@ struct QEASYSHELLSHARED_EXPORT Qes {
             return "tcsh";
         else if (shell == Zsh)
             return "zsh";
+        else if (shell == PowerShell)
+            return "PowerShell";
         else
             return "sh"; // default.
     }
