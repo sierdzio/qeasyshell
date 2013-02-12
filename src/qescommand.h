@@ -110,6 +110,7 @@ private:
     bool redirectToFile(const QString &filename, const QByteArray &data,
                         Qes::Pipeline pipe = Qes::Redirect);
     QString prepareCommand(const QString &command, bool windowsMode = false);
+    void clearMembers();
 
     bool m_finished;
     bool m_windowsCompatibility;

@@ -159,7 +159,7 @@ QesCommand *QesCommand::operator >>(const QString &destination)
 QesResult *QesCommand::run(const QByteArray &input)
 {
     QesResult *result = new QesResult(this);
-    ProcessList processList;
+    ProcessList m_processList;
 
     for(int i = 0; i < m_commands.length(); ++i) {
         int previousIndex = i - 1;
@@ -167,20 +167,21 @@ QesResult *QesCommand::run(const QByteArray &input)
 
         // Skip process creation for redirection. It just needs to write
         // output.
-        if ((previousIndex >= 0) && (m_commands.at(previousIndex).pipeline() & (Qes::Redirect | Qes::RedirectAppend))) {
+        if ((previousIndex >= 0) && (m_commands.at(previousIndex).pipeline()
+                                     & (Qes::Redirect | Qes::RedirectAppend))) {
             --previousIndex;
         }
 
         if (pipeline & (Qes::Redirect | Qes::RedirectAppend)) {
-            processList.append(new QesProcess(i, this));
+            m_processList.append(new QesProcess(i, this));
             ++i;
             pipeline = m_commands.at(i).pipeline();
         }
 
-        processList.append(new QesProcess(i, this));
+        m_processList.append(new QesProcess(i, this));
 
-        QesProcess *current = processList.at(i);
-        QesProcess *previous = (i != 0)? processList.at(previousIndex) : 0;
+        QesProcess *current = m_processList.at(i);
+        QesProcess *previous = (i != 0)? m_processList.at(previousIndex) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             if ((i < (m_commands.length() - 1) && m_commands.at(i + 1).pipeline() == Qes::Chain)
@@ -224,8 +225,8 @@ QesResult *QesCommand::run(const QByteArray &input)
             }
 
             for(int j = 0; j < i; ++j) {
-                if (processList.at(j)->state() != QProcess::NotRunning)
-                    processList.at(j)->waitForFinished();
+                if (m_processList.at(j)->state() != QProcess::NotRunning)
+                    m_processList.at(j)->waitForFinished();
             }
 
             connectOutputs(current, result);
@@ -233,36 +234,33 @@ QesResult *QesCommand::run(const QByteArray &input)
     }
 
     // This will do nothing if last command was chained
-    processList.last()->start(prepareCommand(m_commands.last().command(),
+    m_processList.last()->start(prepareCommand(m_commands.last().command(),
                                              m_windowsCompatibility));
+
     if ((m_commands.length() >= 3) && (m_commands.at(m_commands.length() - 2).pipeline()
                                        & (Qes::Redirect | Qes::RedirectAppend))) {
-        processList.last()->closeWriteChannel();
+        m_processList.last()->closeWriteChannel();
     }
 
     if (m_commands.length() == 1) {
-        processList.last()->write(input);
-        processList.last()->closeWriteChannel();
+        m_processList.last()->write(input);
+        m_processList.last()->closeWriteChannel();
     }
 
     for(int i = 0; i < m_commands.length(); ++i) {
-        if (processList.at(i)->state() != QProcess::NotRunning) {
-            //            processList.at(i)->closeWriteChannel();
-            processList.at(i)->waitForFinished();
+        if (m_processList.at(i)->state() != QProcess::NotRunning) {
+            m_processList.at(i)->waitForFinished();
         }
 
-        //        if (m_commands.at(i).pipeline() & (Qes::Redirect | Qes::RedirectAppend)) {
-        //            redirectToFile(m_commands.at(i).command(), processList.at(i - 1)->readAll(),
-        //                           m_commands.at(i).pipeline());
-        //        }
-
-        if (processList.at(i)->isError()) {
-            result->appendProgressError(QString("Process: " + m_commands.at(i).command() + " failed! Error: "
-                                                + processList.at(i)->errorString()));
+        if (m_processList.at(i)->isError()) {
+            result->appendProgressError(QString("Process: " + m_commands.at(i).command()
+                                                + " failed! Error: "
+                                                + m_processList.at(i)->errorString()));
         }
     }
 
     m_result = result;
+    clearMembers();
     emit finished(result);
     return result;
 }
@@ -508,18 +506,27 @@ QString QesCommand::prepareCommand(const QString &command, bool windowsMode)
 }
 
 /*!
+  Clears member variables to conserve memory.
+  */
+void QesCommand::clearMembers()
+{
+    foreach (QesProcess *p, m_processList) {
+        p->deleteLater();
+    }
+
+    m_processList.clear();
+    m_finished = false;
+    m_currentCommandIndex = -1;
+}
+
+/*!
   Performs the actions needed to finalise detahed command execution.
 
   Emits finished() signals.
  */
 void QesCommand::aboutToFinish()
 {
-    foreach (QesProcess *process, m_processList) {
-        process->deleteLater();
-    }
-    m_processList.clear();
-
-    m_finished = true;
+    clearMembers();
     emit finished();
     emit finished(m_result);
 }
