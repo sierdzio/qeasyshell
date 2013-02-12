@@ -297,6 +297,8 @@ void QesCommand::terminateAll()
     foreach (QesProcess *p, m_processList) {
         p->terminate();
     }
+
+    clearMembers();
 }
 
 /*!
@@ -312,6 +314,8 @@ void QesCommand::killAll()
     foreach (QesProcess *p, m_processList) {
         p->kill();
     }
+
+    clearMembers();
 }
 
 /*!
