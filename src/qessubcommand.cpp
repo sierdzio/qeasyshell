@@ -10,7 +10,7 @@
   Initialises the object with \a command to run, and \a pipe to use.
   */
 QesSubCommand::QesSubCommand(const QString &command, Qes::Pipeline pipe) :
-    m_command(command), m_pipeline(pipe)
+    mCommand(command), mPipeline(pipe)
 {
 }
 
@@ -19,7 +19,7 @@ QesSubCommand::QesSubCommand(const QString &command, Qes::Pipeline pipe) :
   */
 QString QesSubCommand::toString() const
 {
-    return QString(Qes::pipelineToString(m_pipeline) + m_command);
+    return QString(Qes::pipelineToString(mPipeline) + mCommand);
 }
 
 /*!
@@ -27,7 +27,7 @@ QString QesSubCommand::toString() const
   */
 Qes::Pipeline QesSubCommand::pipeline() const
 {
-    return m_pipeline;
+    return mPipeline;
 }
 
 /*!
@@ -35,7 +35,7 @@ Qes::Pipeline QesSubCommand::pipeline() const
   */
 void QesSubCommand::setPipeline(Qes::Pipeline pipeline)
 {
-    m_pipeline = pipeline;
+    mPipeline = pipeline;
 }
 
 /*!
@@ -43,5 +43,5 @@ void QesSubCommand::setPipeline(Qes::Pipeline pipeline)
   */
 QString QesSubCommand::command() const
 {
-    return m_command;
+    return mCommand;
 }

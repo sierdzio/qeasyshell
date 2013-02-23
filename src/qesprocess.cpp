@@ -10,9 +10,9 @@
   Instantiates the QesProcess object with \a index and optional \a parent.
   */
 QesProcess::QesProcess(int index, QObject *parent) :
-    QProcess(parent), m_index(index)
+    QProcess(parent), mIndex(index)
 {
-    m_error = false;
+    mError = false;
 
     connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(prepareReadStdOut()));
     connect(this, SIGNAL(readyReadStandardError()), this, SLOT(prepareReadStdErr()));
@@ -26,7 +26,7 @@ QesProcess::QesProcess(int index, QObject *parent) :
   */
 bool QesProcess::isError() const
 {
-    return m_error;
+    return mError;
 }
 
 /*!
@@ -86,7 +86,7 @@ void QesProcess::setError(QProcess::ProcessError error)
 {
     Q_UNUSED(error);
 
-    m_error = true;
+    mError = true;
 }
 
 /*!
@@ -95,7 +95,7 @@ void QesProcess::setError(QProcess::ProcessError error)
 void QesProcess::prepareReadStdOut()
 {
     QByteArray toSend = readAllStandardOutput();
-    emit readyReadStandardOutput(toSend, m_index);
+    emit readyReadStandardOutput(toSend, mIndex);
 }
 
 /*!
@@ -104,5 +104,5 @@ void QesProcess::prepareReadStdOut()
 void QesProcess::prepareReadStdErr()
 {
     QByteArray toSend = readAllStandardError();
-    emit readyReadStandardError(toSend, m_index);
+    emit readyReadStandardError(toSend, mIndex);
 }

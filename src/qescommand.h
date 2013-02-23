@@ -121,12 +121,12 @@ private:
     QString prepareCommand(const QString &command, bool windowsMode = false);
     void clearMembers();
 
-    bool m_finished;
-    bool m_windowsCompatibility;
-    int m_currentCommandIndex;
-    CommandList m_commands;
-    ProcessList m_processList;
-    QesResult *m_result;
+    bool mFinished;
+    bool mWindowsCompatibility;
+    int mCurrentCommandIndex;
+    CommandList mCommands;
+    ProcessList mProcessList;
+    QesResult *mResult;
 };
 
 #endif // QESCOMMAND_H

@@ -60,10 +60,10 @@ public slots:
 private:
     QStringList rawToStringList(const QByteArray &rawData) const;
 
-    bool m_isValid;
-    QByteArray m_rawStdOut;
-    QByteArray m_rawStdErr;
-    QString m_progressError;
+    bool mIsValid;
+    QByteArray mRawStdOut;
+    QByteArray mRawStdErr;
+    QString mProgressError;
 };
 
 #endif // QESRESULT_H

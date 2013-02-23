@@ -15,7 +15,7 @@
 QesResult::QesResult(QObject *parent) :
     QObject(parent)
 {
-    m_rawStdOut = QByteArray(); // a null QByteArray
+    mRawStdOut = QByteArray(); // a null QByteArray
 }
 
 /*!
@@ -25,7 +25,7 @@ QesResult::QesResult(QObject *parent) :
   */
 void QesResult::setStdErr(const QByteArray &rawError)
 {
-    m_rawStdErr = rawError;
+    mRawStdErr = rawError;
 }
 
 /*!
@@ -33,7 +33,7 @@ void QesResult::setStdErr(const QByteArray &rawError)
   */
 QByteArray QesResult::stdErrRaw() const
 {
-    return m_rawStdErr;
+    return mRawStdErr;
 }
 
 /*!
@@ -41,7 +41,7 @@ QByteArray QesResult::stdErrRaw() const
   */
 QString QesResult::stdErrString() const
 {
-    return QString(m_rawStdErr);
+    return QString(mRawStdErr);
 }
 
 /*!
@@ -49,7 +49,7 @@ QString QesResult::stdErrString() const
   */
 QStringList QesResult::stdErrStringList() const
 {
-    return rawToStringList(m_rawStdErr);
+    return rawToStringList(mRawStdErr);
 }
 
 /*!
@@ -60,7 +60,7 @@ QStringList QesResult::stdErrStringList() const
   */
 void QesResult::setStdOut(const QByteArray &rawData)
 {
-    m_rawStdOut = rawData;
+    mRawStdOut = rawData;
 }
 
 /*!
@@ -68,7 +68,7 @@ void QesResult::setStdOut(const QByteArray &rawData)
   */
 QByteArray QesResult::stdOutRaw() const
 {
-    return m_rawStdOut;
+    return mRawStdOut;
 }
 
 /*!
@@ -76,7 +76,7 @@ QByteArray QesResult::stdOutRaw() const
   */
 QString QesResult::stdOutString() const
 {
-    return QString(m_rawStdOut);
+    return QString(mRawStdOut);
 }
 
 /*!
@@ -84,7 +84,7 @@ QString QesResult::stdOutString() const
   */
 QStringList QesResult::stdOutStringList() const
 {
-    return rawToStringList(m_rawStdOut);
+    return rawToStringList(mRawStdOut);
 }
 
 /*!
@@ -94,7 +94,7 @@ QStringList QesResult::stdOutStringList() const
  */
 void QesResult::setProgressError(const QString &message)
 {
-    m_progressError = message;
+    mProgressError = message;
 }
 
 /*!
@@ -106,7 +106,7 @@ void QesResult::setProgressError(const QString &message)
  */
 QString QesResult::progressError() const
 {
-    return m_progressError;
+    return mProgressError;
 }
 
 /*!
@@ -114,9 +114,9 @@ QString QesResult::progressError() const
   */
 void QesResult::setValid(bool validity)
 {
-    m_isValid = validity;
+    mIsValid = validity;
     if (validity == false)
-        m_rawStdOut = QByteArray(); // a null QByteArray
+        mRawStdOut = QByteArray(); // a null QByteArray
 }
 
 /*!
@@ -124,7 +124,7 @@ void QesResult::setValid(bool validity)
   */
 bool QesResult::isValid() const
 {
-    return m_isValid;
+    return mIsValid;
 }
 
 /*!
@@ -134,7 +134,7 @@ bool QesResult::isValid() const
   */
 void QesResult::appendStdOut(const QByteArray &stdOut)
 {
-    m_rawStdOut.append(stdOut);
+    mRawStdOut.append(stdOut);
 }
 
 /*!
@@ -144,7 +144,7 @@ void QesResult::appendStdOut(const QByteArray &stdOut)
   */
 void QesResult::appendStdErr(const QByteArray &stdErr)
 {
-    m_rawStdErr.append(stdErr);
+    mRawStdErr.append(stdErr);
 }
 
 /*!
@@ -153,7 +153,7 @@ void QesResult::appendStdErr(const QByteArray &stdErr)
  */
 void QesResult::appendProgressError(const QString &message, bool addNewLine)
 {
-    m_progressError.append(message + QString((addNewLine)? "\n" : ""));
+    mProgressError.append(message + QString((addNewLine)? "\n" : ""));
 }
 
 /*!

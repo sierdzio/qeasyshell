@@ -28,8 +28,8 @@ public:
     QString command() const;
 
 private:
-    QString m_command;
-    Qes::Pipeline m_pipeline;
+    QString mCommand;
+    Qes::Pipeline mPipeline;
 };
 
 /*!

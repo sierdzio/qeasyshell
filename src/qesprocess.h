@@ -48,8 +48,8 @@ protected slots:
     void prepareReadStdErr();
     
 private:
-    int m_index;
-    bool m_error;
+    int mIndex;
+    bool mError;
 };
 
 /*!
