@@ -7,8 +7,8 @@
 #ifndef QESSUBCOMMAND_H
 #define QESSUBCOMMAND_H
 
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QList>
+#include <QString>
 
 #include "qesdefinitions.h"
 

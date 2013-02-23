@@ -7,10 +7,10 @@
 #ifndef QESRESULT_H
 #define QESRESULT_H
 
-#include <QtCore/QObject>
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QByteArray>
+#include <QString>
+#include <QStringList>
 
 #include "qeasyshellglobal.h"
 #include "qesdefinitions.h"

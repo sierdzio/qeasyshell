@@ -7,7 +7,7 @@
 #ifndef QEASYSHELL_GLOBAL_H
 #define QEASYSHELL_GLOBAL_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 #if defined(QEASYSHELL_LIBRARY)
 #  define QEASYSHELLSHARED_EXPORT Q_DECL_EXPORT

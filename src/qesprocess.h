@@ -7,8 +7,8 @@
 #ifndef QESPROCESS_H
 #define QESPROCESS_H
 
-#include <QtCore/QByteArray>
-#include <QtCore/QProcess>
+#include <QByteArray>
+#include <QProcess>
 
 /*!
   \brief Expands QProcess with some methods important in shell communication.

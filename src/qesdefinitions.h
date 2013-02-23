@@ -7,7 +7,7 @@
 #ifndef QESDEFINITIONS_H
 #define QESDEFINITIONS_H
 
-#include <QtCore/QString>
+#include <QString>
 #include "qeasyshellglobal.h"
 
 /*!
