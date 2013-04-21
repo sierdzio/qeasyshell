@@ -5,10 +5,10 @@ A general list of things that may be implemented in the future, or are being
 worked upon right now, in QES. Feel free to suggest, and/ or help implementing
 new and existing entries!
 
-\li stop on errors (is applicable)
+\li stop on errors (if applicable)
 \li support for input and output redirection (1>, 2>>, etc.)
 \li proper support for other shells than bash (is it really needed?)
-\li add support for passing shell script strings to execute
+\li add support for passing shell script strings or files to execute
 \li add specialised command classes (like QesGrep etc.) to make it easier to
     invoke some of them
 \li research if MS PowerShell can be used on Windows

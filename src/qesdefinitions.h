@@ -45,6 +45,8 @@ struct QEASYSHELLSHARED_EXPORT Qes {
                             //! to a file (if it already exists, it will be removed).
                             //! Equivalent to '>' in shell.
 
+        Truncate       = Redirect,
+
         RedirectAppend = 8  //! Used at the end of a chain redirects output of the command
                             //! to a file (if it already exists, data will be appended).
                             //! Equivalent to ">>" in shell.
