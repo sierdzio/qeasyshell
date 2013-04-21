@@ -159,7 +159,7 @@ QesCommand *QesCommand::operator >>(const QString &destination)
 QesResult *QesCommand::run(const QByteArray &input)
 {
     QesResult *result = new QesResult(this);
-    ProcessList mProcessList;
+    mProcessList.clear();
 
     for(int i = 0; i < mCommands.length(); ++i) {
         int previousIndex = i - 1;
