@@ -159,7 +159,7 @@ QesCommand *QesCommand::operator >>(const QString &destination)
 QesResult *QesCommand::run(const QByteArray &input)
 {
     QesResult *result = new QesResult(this);
-    ProcessList m_processList;
+    ProcessList mProcessList;
 
     for(int i = 0; i < mCommands.length(); ++i) {
         int previousIndex = i - 1;
@@ -173,15 +173,15 @@ QesResult *QesCommand::run(const QByteArray &input)
         }
 
         if (pipeline & (Qes::Redirect | Qes::RedirectAppend)) {
-            m_processList.append(new QesProcess(i, this));
+            mProcessList.append(new QesProcess(i, this));
             ++i;
             pipeline = mCommands.at(i).pipeline();
         }
 
-        m_processList.append(new QesProcess(i, this));
+        mProcessList.append(new QesProcess(i, this));
 
-        QesProcess *current = m_processList.at(i);
-        QesProcess *previous = (i != 0)? m_processList.at(previousIndex) : 0;
+        QesProcess *current = mProcessList.at(i);
+        QesProcess *previous = (i != 0)? mProcessList.at(previousIndex) : 0;
 
         if (pipeline == Qes::None || pipeline == Qes::Pipe) {
             if ((i < (mCommands.length() - 1) && mCommands.at(i + 1).pipeline() == Qes::Chain)
@@ -225,8 +225,8 @@ QesResult *QesCommand::run(const QByteArray &input)
             }
 
             for(int j = 0; j < i; ++j) {
-                if (m_processList.at(j)->state() != QProcess::NotRunning)
-                    m_processList.at(j)->waitForFinished();
+                if (mProcessList.at(j)->state() != QProcess::NotRunning)
+                    mProcessList.at(j)->waitForFinished();
             }
 
             connectOutputs(current, result);
@@ -234,28 +234,28 @@ QesResult *QesCommand::run(const QByteArray &input)
     }
 
     // This will do nothing if last command was chained
-    m_processList.last()->start(prepareCommand(mCommands.last().command(),
+    mProcessList.last()->start(prepareCommand(mCommands.last().command(),
                                              mWindowsCompatibility));
 
     if ((mCommands.length() >= 3) && (mCommands.at(mCommands.length() - 2).pipeline()
                                        & (Qes::Redirect | Qes::RedirectAppend))) {
-        m_processList.last()->closeWriteChannel();
+        mProcessList.last()->closeWriteChannel();
     }
 
     if (mCommands.length() == 1) {
-        m_processList.last()->write(input);
-        m_processList.last()->closeWriteChannel();
+        mProcessList.last()->write(input);
+        mProcessList.last()->closeWriteChannel();
     }
 
     for(int i = 0; i < mCommands.length(); ++i) {
-        if (m_processList.at(i)->state() != QProcess::NotRunning) {
-            m_processList.at(i)->waitForFinished();
+        if (mProcessList.at(i)->state() != QProcess::NotRunning) {
+            mProcessList.at(i)->waitForFinished();
         }
 
-        if (m_processList.at(i)->isError()) {
+        if (mProcessList.at(i)->isError()) {
             result->appendProgressError(QString("Process: " + mCommands.at(i).command()
                                                 + " failed! Error: "
-                                                + m_processList.at(i)->errorString()));
+                                                + mProcessList.at(i)->errorString()));
         }
     }
 
